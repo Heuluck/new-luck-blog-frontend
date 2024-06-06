@@ -15,7 +15,7 @@ export default function LayoutDefault({
       <Sidebar>
         <Logo />
         <Link href="/">欢迎</Link>
-        <Link href="/star-wars">拉取数据</Link>
+        <Link href="/index2">拉取数据</Link>
       </Sidebar>
       <Content>{children}</Content>
     </div>
