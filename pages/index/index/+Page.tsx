@@ -1,19 +1,24 @@
 import React from "react";
 import { useData } from "vike-react/useData";
 import type { Data } from "./+data.js";
+import ArticleItem from "../../../components/Blog/Index/article.jsx";
 
 export default function Page() {
     const blogs = useData<Data>();
     return (
         <>
-            <h1>blogs</h1>
-            <ol>
-                {blogs.map(({ id, title, titleURL, lastUpdate }) => (
-                    <li key={id}>
-                        <a href={`/star-wars/${titleURL}`}>{title}</a> ({lastUpdate})
-                    </li>
+            <div>
+                {blogs.map(({ id, title, content, titleURL, username, lastUpdate }) => (
+                    <ArticleItem
+                        id={id}
+                        title={title}
+                        username={username}
+                        titleURL={titleURL}
+                        lastUpdate={lastUpdate}
+                        content={content}
+                    />
                 ))}
-            </ol>
+            </div>
         </>
     );
 }

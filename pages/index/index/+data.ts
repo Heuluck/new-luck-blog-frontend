@@ -9,7 +9,6 @@ export const data = async () => {
     const articles = res.data.data as Article[];
     return articles;
   } catch (error) {
-    console.log(error);
-    return [];
+    throw new Error("error");
   }
 };
