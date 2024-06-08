@@ -10,6 +10,7 @@ export default function Page() {
             <div>
                 {blogs.map(({ id, title, content, titleURL, username, lastUpdate }) => (
                     <ArticleItem
+                        key={id}
                         id={id}
                         title={title}
                         username={username}
