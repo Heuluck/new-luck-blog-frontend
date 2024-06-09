@@ -10,6 +10,7 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [email, setEmail] = useState("");
 
     const [toNext, setToNext] = useState(0);
     const [toNextAnimeMiddle, setToNextAnimeMiddle] = useState(false);
@@ -21,12 +22,12 @@ export default function Login() {
             setToNext(2);
             setTimeout(() => {
                 setToNextAnimeMiddle(true);
-            }, 1000);
+            }, 700);
         } else {
             setToNext(1);
             setTimeout(() => {
                 setToNextAnimeMiddle(false);
-            }, 1000);
+            }, 700);
         }
     };
 
@@ -45,6 +46,17 @@ export default function Login() {
                         password: CryptoJS.SHA256(password).toString(),
                     });
                     console.log(res.data);
+                    if (res.data.code === 200) {
+                        messageApi.open({
+                            type: "success",
+                            content: "登录成功",
+                        });
+                    } else {
+                        messageApi.open({
+                            type: "warning",
+                            content: "用户名或密码错误",
+                        });
+                    }
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
                         if (error.response?.status === 401)
@@ -54,7 +66,7 @@ export default function Login() {
                             });
                         else {
                             messageApi.open({
-                                type: "warning",
+                                type: "error",
                                 content: "服务器错误",
                             });
                             console.error(error);
@@ -78,9 +90,16 @@ export default function Login() {
                 try {
                     const res = await axios.post(import.meta.env.BASE_URL + "/auth/reg", {
                         name: username,
+                        email: email,
                         password: CryptoJS.SHA256(password).toString(),
                     });
                     console.log(res.data);
+                    if (res.data.code === 200) {
+                        messageApi.open({
+                            type: "success",
+                            content: "注册成功",
+                        });
+                    }
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
                         if (error.response?.status === 400)
@@ -90,7 +109,7 @@ export default function Login() {
                             });
                         else {
                             messageApi.open({
-                                type: "warning",
+                                type: "error",
                                 content: "服务器错误",
                             });
                             console.error(error);
@@ -121,14 +140,23 @@ export default function Login() {
                             onChange={(e) => setUsername(e.target.value)}
                             description="请输入用户名"></AuthForm.Item>
                         <AuthForm.Item
+                            type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             description="请输入密码"></AuthForm.Item>
                         {toNextAnimeMiddle && (
-                            <AuthForm.Item
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                description="请输入确认密码"></AuthForm.Item>
+                            <>
+                                <AuthForm.Item
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    description="请输入确认密码"></AuthForm.Item>
+                                <AuthForm.Item
+                                    type="text"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    description="请输入邮箱"></AuthForm.Item>
+                            </>
                         )}
                         <div className="my-4 flex flex-row">
                             <input

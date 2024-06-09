@@ -32,18 +32,18 @@
     }
 }
 
-.normal-1{
+.normal-1 {
     perspective: 5.5cm;
 }
 
 .rotate-next {
     animation:
-        rotateToNext 1s ease-in,
-        rotateToPrev 1s ease-out 1s;
+        rotateToNext 0.7s ease-in,
+        rotateToPrev 0.7s ease-out 0.7s;
 }
 
 .rotate-prev {
     animation:
-        rotateToNext-1 1s ease-in,
-        rotateToPrev-1 1s ease-out 1s;
+        rotateToNext-1 0.7s ease-in,
+        rotateToPrev-1 0.7s ease-out 0.7s;
 }
