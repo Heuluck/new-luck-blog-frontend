@@ -2,8 +2,9 @@ import { useState } from "react";
 import AuthForm from "../../../components/Form/authForm";
 import xiaoXuQiu from "/xiaoXuQiu.jpg";
 import axios, { AxiosError } from "axios";
-import "./animation.css";
 import { message } from "antd";
+import CryptoJS from "crypto-js";
+import "./animation.css";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -41,7 +42,7 @@ export default function Login() {
                 try {
                     const res = await axios.post(import.meta.env.BASE_URL + "/auth", {
                         name: username,
-                        password,
+                        password: CryptoJS.SHA256(password).toString(),
                     });
                     console.log(res.data);
                 } catch (error) {
@@ -77,7 +78,7 @@ export default function Login() {
                 try {
                     const res = await axios.post(import.meta.env.BASE_URL + "/auth/reg", {
                         name: username,
-                        password,
+                        password: CryptoJS.SHA256(password).toString(),
                     });
                     console.log(res.data);
                 } catch (error) {
