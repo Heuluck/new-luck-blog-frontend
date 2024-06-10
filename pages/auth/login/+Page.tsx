@@ -7,6 +7,7 @@ import CryptoJS from "crypto-js";
 import "./animation.css";
 import { AuthResponse } from "types/request";
 import dayjs from "dayjs";
+import { setCookie } from "@utils/client/cookie";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -53,7 +54,11 @@ export default function Login() {
                             type: "success",
                             content: "登录成功",
                         });
-                        window.localStorage.setItem("token", data.token);
+                        console.log(data.token);
+                        setCookie("token", data.token, 1);
+                        setTimeout(() => {
+                            window.location.href = "/dashboard";
+                        }, 1000);
                     } else {
                         messageApi.open({
                             type: "warning",
@@ -99,11 +104,14 @@ export default function Login() {
                     console.log(res.data);
                     if (res.data.code === 200) {
                         const data = res.data as AuthResponse;
-                        window.localStorage.setItem("token", data.token);
+                        setCookie("token", data.token, 1);
                         messageApi.open({
                             type: "success",
                             content: "注册成功",
                         });
+                        setTimeout(() => {
+                            window.location.href = "/";
+                        }, 1000);
                     }
                 } catch (error) {
                     if (axios.isAxiosError(error)) {

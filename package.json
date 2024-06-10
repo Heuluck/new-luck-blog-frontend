@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@types/crypto-js": "^4.2.2",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.14.2",
     "@vitejs/plugin-react": "^4.3.0",
     "antd": "^5.18.0",
@@ -36,6 +37,7 @@
     "cross-fetch": "^4.0.0",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.11",
+    "jose": "^5.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",

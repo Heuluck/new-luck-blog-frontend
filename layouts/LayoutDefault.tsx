@@ -2,7 +2,6 @@ import "./style.css";
 
 import "./tailwind.css";
 import React from "react";
-import logoUrl from "../assets/logo.svg";
 import { Link } from "../components/Link.js";
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
@@ -14,6 +13,8 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                 </a>
                 <Link href="/">首页</Link>
                 <Link href="/index2">测试</Link>
+                <Link href="/auth/login">登录</Link>
+                <Link href="/dashboard">后台</Link>
                 <a
                     href="https://heuluck.top"
                     className="p-4 px-6 hidden md:flex justify-center items-center text-sm text-gray-400 hover:bg-gray-600">
@@ -25,9 +26,9 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
     );
 }
 
-function TopBar({ children }: { children: React.ReactNode }) {
+export function TopBar({ children, className }: { children: React.ReactNode; className?: string }) {
     return (
-        <div>
+        <div className={className}>
             <div className="h-2 bg-sky-500" />
             <div id="sidebar" className="sticky flex flex-row h-16 md:px-20 bg-slate-800">
                 {children}
@@ -38,7 +39,9 @@ function TopBar({ children }: { children: React.ReactNode }) {
 
 function Content({ children }: { children: React.ReactNode }) {
     return (
-        <div id="page-container" className="bg-slate-300 w-full flex justify-center items-center page-transition-finish">
+        <div
+            id="page-container"
+            className="bg-slate-300 w-full flex justify-center items-center page-transition-finish">
             <div id="page-content" className="p-5 pb-12 w-full md:w-9/12 flex justify-center items-center">
                 {children}
             </div>

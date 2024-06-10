@@ -13,5 +13,6 @@ export const data = async () => {
             console.error(error);
             throw new AxiosError();
         }
+        return [];
     }
 };

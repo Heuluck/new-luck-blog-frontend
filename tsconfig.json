@@ -25,9 +25,13 @@
     "jsxImportSource": "react",
     "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@utils/*": ["./utils/*"],
+      "@layouts/*": ["./layouts/*"],
+      "@pages/*": ["./pages/*"],
+      "@components/*": ["./components/*"],
+      "@assets/*": ["./assets/*"],
+      "@typesSelf/*": ["./types/*"],
+      "@common/*": ["./common/*"],
     },
   },
   "exclude": [
