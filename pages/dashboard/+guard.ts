@@ -12,12 +12,12 @@ const guard: GuardAsync = async (pageContext): ReturnType<GuardAsync> => {
             if (result.type === "admin") {
                 return;
             } else {
-                throw render(401, "无权限访问-1");
+                throw render(401, "您没有控制台权限");
             }
         } catch (e) {
             if (e instanceof JWSInvalid)
                 throw render(418 as any, "你这 token 有问题啊");
-            else throw render(401, "无权限访问-2");
+            else throw render(401, "您没有控制台权限");
         }
     }
     // return;

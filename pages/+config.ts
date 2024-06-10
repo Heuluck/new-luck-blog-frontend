@@ -10,4 +10,7 @@ export default {
   // <title>
   title: "My Vike App",
   extends: vikeReact,
+  passToClient: [
+    'headers'
+  ]
 } satisfies Config;
