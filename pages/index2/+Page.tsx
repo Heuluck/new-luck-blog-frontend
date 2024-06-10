@@ -3,15 +3,10 @@ import { Counter } from "./Counter.js";
 
 export default function Page() {
   return (
-    <>
-      <h1 className="font-bold text-3xl pb-4">My Vike app</h1>
-      This page is:
-      <ul>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-      </ul>
-    </>
+    <div>
+      <h1 className="font-bold text-3xl m-3">看</h1>
+      <p className="m-3">这个按钮点一下会+1</p>
+      <div className="m-3"><Counter /></div>
+    </div>
   );
 }

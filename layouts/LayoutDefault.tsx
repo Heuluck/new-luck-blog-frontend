@@ -27,8 +27,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                 {cookieIsExists && (
                     <a
                         className="hidden md:flex justify-center items-center ml-auto text-sm text-gray-400"
-                        href="/dashboard"
-                        target="_blank">
+                        href="/dashboard">
                         <span className="p-2 rounded-lg transition-all hover:bg-slate-600">控制台</span>
                     </a>
                 )}

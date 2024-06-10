@@ -12,6 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     Heuluck的新博客
                 </a>
                 <TabLink href="/dashboard">首页</TabLink>
+                <TabLink href="/dashboard/Articles">文章列表</TabLink>
             </LeftBar>
             <Content>{children}</Content>
         </div>

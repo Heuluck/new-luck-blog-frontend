@@ -6,7 +6,7 @@ export async function find_Verify(cookie: string): Promise<BEJwtPayload> {
     return new Promise((resolve, reject) => {
         const token = parseCookieString(cookie, "token");
         if (token) {
-            const spki = fs.readFileSync("./utils/server/public.pem").toString();
+            const spki = import.meta.env.PUBLIC_ENV__PUBLIC_PEM
             jose.importSPKI(spki, "ES256").then(
                 (res) => {
                     jose.jwtVerify(token, res).then(

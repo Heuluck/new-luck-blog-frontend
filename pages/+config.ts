@@ -8,7 +8,7 @@ export default {
   Layout,
   Head,
   // <title>
-  title: "My Vike App",
+  title: "Heuluck的新博客",
   extends: vikeReact,
   passToClient: [
     'headers'
