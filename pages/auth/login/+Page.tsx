@@ -5,6 +5,8 @@ import axios, { AxiosError } from "axios";
 import { message } from "antd";
 import CryptoJS from "crypto-js";
 import "./animation.css";
+import { AuthResponse } from "types/request";
+import dayjs from "dayjs";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -41,16 +43,17 @@ export default function Login() {
                 });
             } else
                 try {
-                    const res = await axios.post(import.meta.env.BASE_URL + "/auth", {
+                    const res = await axios.post(import.meta.env.PUBLIC_ENV__BASE_URL + "/auth", {
                         name: username,
                         password: CryptoJS.SHA256(password).toString(),
                     });
-                    console.log(res.data);
                     if (res.data.code === 200) {
+                        const data = res.data as AuthResponse;
                         messageApi.open({
                             type: "success",
                             content: "登录成功",
                         });
+                        window.localStorage.setItem("token", data.token);
                     } else {
                         messageApi.open({
                             type: "warning",
@@ -88,13 +91,15 @@ export default function Login() {
                 });
             } else
                 try {
-                    const res = await axios.post(import.meta.env.BASE_URL + "/auth/reg", {
+                    const res = await axios.post(import.meta.env.PUBLIC_ENV__BASE_URL + "/auth/reg", {
                         name: username,
                         email: email,
                         password: CryptoJS.SHA256(password).toString(),
                     });
                     console.log(res.data);
                     if (res.data.code === 200) {
+                        const data = res.data as AuthResponse;
+                        window.localStorage.setItem("token", data.token);
                         messageApi.open({
                             type: "success",
                             content: "注册成功",

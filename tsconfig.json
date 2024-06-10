@@ -22,9 +22,15 @@
       "vike-react"
     ],
     "jsx": "preserve",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
   },
   "exclude": [
     "dist"
-  ]
+  ],
 }

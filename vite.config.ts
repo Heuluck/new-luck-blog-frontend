@@ -4,4 +4,10 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react({}), ssr({})],
+  resolve: {
+    alias: {
+      // 设置别名
+      '@': '/src',
+    },
+  },
 });
