@@ -4,6 +4,7 @@ import { find_Verify } from "@utils/server/jwt";
 import { JWSInvalid } from "jose/errors";
 const guard: GuardAsync = async (pageContext): ReturnType<GuardAsync> => {
     if (pageContext.headers?.cookie == undefined || pageContext.headers?.cookie.trim() === "") {
+        console.log(pageContext.headers?.cookie);
         throw render(401, "请先登录");
     } else {
         try {
@@ -11,12 +12,12 @@ const guard: GuardAsync = async (pageContext): ReturnType<GuardAsync> => {
             if (result.type === "admin") {
                 return;
             } else {
-                throw render(401, "无权限访问");
+                throw render(401, "无权限访问-1");
             }
         } catch (e) {
             if (e instanceof JWSInvalid)
                 throw render(418 as any, "你这 token 有问题啊");
-            else throw render(401, "无权限访问");
+            else throw render(401, "无权限访问-2");
         }
     }
     // return;

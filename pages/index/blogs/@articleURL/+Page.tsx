@@ -9,7 +9,7 @@ export default function Page() {
     return (
         <>
             <div className="flex p-8 bg-slate-200 flex-col rounded-lg group md:w-9/12 w-full">
-                <h1 className="font-serif font-bold md:text-2xl text-base text-blue-500 ">{article.title}</h1>
+                <h1 className="font-bold md:text-2xl text-base text-blue-500 ">{article.title}</h1>
                 <div className="group-hover:w-full group-hover:bg-blue-500 h-0.5 mt-1 bg-gray-700 w-1/2 transition-all duration-200" />
                 <div className="flex flex-row mt-3">
                     <div className="text-xs text-gray-500">
@@ -18,7 +18,7 @@ export default function Page() {
                                 className="inline-block"
                                 components={{
                                     a: ({ children, href }) => (
-                                        <a href={href} target="blank" className="text-blue-500 hover:underline">
+                                        <a href={href} target="blank" className="p-1 rounded-lg text-blue-500 transition-all hover:bg-slate-300">
                                             {children}
                                         </a>
                                     ),
