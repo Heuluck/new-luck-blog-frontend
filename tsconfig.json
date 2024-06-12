@@ -32,6 +32,7 @@
       "@assets/*": ["./assets/*"],
       "@typesSelf/*": ["./types/*"],
       "@common/*": ["./common/*"],
+      "@server/*": ["./server/*"]
     },
   },
   "exclude": [
