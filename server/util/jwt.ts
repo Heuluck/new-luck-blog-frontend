@@ -1,8 +1,10 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
+import fs from "fs";
 
 export const signJWT = (payload: JwtPayload, expiresIn: string): Promise<string> => {
+    const privateKey = fs.readFileSync("./server/env/private.key");
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, import.meta.env.PUBLIC_ENV__PUBLIC_PEM, { algorithm: "ES256", expiresIn }, (err, token) => {
+        jwt.sign(payload, privateKey, { algorithm: "ES256", expiresIn }, (err, token) => {
             if (err) {
                 reject(err);
             } else {
@@ -13,9 +15,10 @@ export const signJWT = (payload: JwtPayload, expiresIn: string): Promise<string>
 };
 
 export const verifyJWT = (token: string): Promise<string> => {
+    const publicKey = fs.readFileSync("./server/env/public.pem");
     return new Promise((resolve, reject) => {
         try {
-            jwt.verify(token, import.meta.env.PRIVATE_KEY, function (err, decoded) {
+            jwt.verify(token, publicKey, function (err, decoded) {
                 if (err) {
                     console.log("Error: ", err);
                     reject(err);

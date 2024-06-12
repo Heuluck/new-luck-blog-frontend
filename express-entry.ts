@@ -1,11 +1,19 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+
 import BaseRouter from "@server/routes";
+import dotenv from "dotenv";
 import { vikeHandler } from "./server/vike-handler";
 import { createMiddleware } from "@universal-middleware/express";
 import express from "express";
-import helmet from "helmet";
 import Paths from "@server/common/Paths";
+
+const result2 = dotenv.config({
+    path: "./server/env/.env",
+});
+if (result2.error) {
+    throw result2.error;
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,14 +50,13 @@ export function handlerAdapter<Context extends Record<string | number | symbol, 
     );
 }
 
-startServer();
+// console.log(process.env.MYSQL_HOST);
 
 async function startServer() {
     const app = express();
 
     if (isProduction) {
         app.use(express.static(`${root}/dist/client`));
-        // app.use(helmet());
     } else {
         // Instantiate Vite's development server and integrate its middleware to our server.
         // ⚠️ We should instantiate it *only* in development. (It isn't needed in production
@@ -63,27 +70,25 @@ async function startServer() {
         ).middlewares;
         app.use(viteDevMiddleware);
     }
-
+    app.use(express.json()); // 对于 JSON 格式的数据
+    app.use(express.urlencoded({ extended: true }));
+    app.use(Paths.Base, BaseRouter);
+    // app.get(
+    //     "/api/ping",
+    //     (_, res) => {
+    //         return res.status(200).json({ msg: "pong" });
+    //     }
+    // );
     /**
      * Vike route
      *
      * @link {@see https://vike.dev}
      **/
     app.all("*", handlerAdapter(vikeHandler));
-    // app.use(Paths.Base, BaseRouter);
-    app.get(
-        "/api/ping",
-        handlerAdapter(() => {
-            return new Response(JSON.stringify({ status: "OK" }), {
-                status: 200,
-                headers: {
-                    "content-type": "application/json",
-                },
-            });
-        })
-    );
 
     app.listen(port, () => {
         console.log(`Server listening on http://localhost:${port}`);
     });
 }
+
+startServer();
