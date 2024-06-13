@@ -8,7 +8,6 @@ import { usePageContext } from "vike-react/usePageContext";
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
     const pageContext = usePageContext();
-    const cookieIsExists = pageContext.headers?.cookie;
     return (
         <div className="min-h-screen bg-slate-300">
             <TopBar>
@@ -24,7 +23,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                     className="p-4 px-6 hidden md:flex justify-center items-center text-sm text-gray-400 hover:bg-gray-600 active:bg-gray-950">
                     老博客
                 </a>
-                {cookieIsExists && (
+                {pageContext.user?.type === "admin" && (
                     <a
                         className="hidden md:flex justify-center items-center ml-auto text-sm text-gray-400"
                         href="/dashboard">

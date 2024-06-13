@@ -5,11 +5,9 @@ import { usePageContext } from "vike-react/usePageContext";
 
 export default function Page() {
     const blogs = useData<Data>();
-    const pageContext = usePageContext();
     return (
         <>
             <div>
-                <button onClick={()=>console.log(pageContext.user)}>123</button>
                 {blogs.map(({ id, title, content, titleURL, username, lastUpdate }) => (
                     <ArticleItem
                         key={id}
