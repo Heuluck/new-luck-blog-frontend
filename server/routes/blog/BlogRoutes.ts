@@ -1,7 +1,8 @@
 import HttpStatusCodes from "@server/common/HttpStatusCodes";
 
 import { IReq, IRes } from "../types/express/misc";
-import dbQuery from "@server/database/connection";
+import dbQuery, { dQuery } from "@server/database/connection";
+import { SQLError } from "@server/common/Errors";
 
 async function getAll(_: IReq, res: IRes) {
     dbQuery(
@@ -55,8 +56,76 @@ async function getByTitleURL(req: IReq, res: IRes) {
     );
 }
 
+async function getCategoryByTitleURL(req: IReq, res: IRes) {
+    const titleURL = req.params.titleURL;
+    try {
+        const { results } = await dQuery(
+            `
+SELECT bc.name, bc.url_title
+FROM articles art
+INNER JOIN article_blog_categories art_bc
+ON art_bc.article_id = art.id
+INNER JOIN blog_categories bc
+ON bc.id = art_bc.blog_category_id
+WHERE art.titleURL = ?;`,
+            [titleURL]
+        );
+        return results.constructor === Array && results.length > 0
+            ? res.status(HttpStatusCodes.OK).json({ code: 200, message: "查询成功", data: results })
+            : res.status(HttpStatusCodes.OK).json({ code: 200, message: "查询成功，但没有分类", data: null });
+    } catch (e) {
+        console.log(e);
+        if (e instanceof SQLError)
+            return res
+                .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
+        else return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: "[UNKNOWN ERROR]" });
+    }
+}
+
+async function getCategoryByCategoryTitleURL(req: IReq, res: IRes) {
+    const titleURL = req.params.titleURL;
+    try {
+        const { results } = await dQuery(
+            `
+SELECT art.id, username, lastUpdate, title, content, titleURL
+FROM articles art
+INNER JOIN article_blog_categories art_bc
+ON art_bc.article_id = art.id
+INNER JOIN blog_categories bc
+ON bc.id = art_bc.blog_category_id
+WHERE bc.url_title = ?;`,
+            [titleURL]
+        );
+        const name = await dQuery(`SELECT name,description FROM blog_categories WHERE url_title = ?;`, [titleURL]);
+        return results.constructor === Array &&
+            results.length >= 0 &&
+            name.results.constructor === Array &&
+            name.results.length == 1
+            ? res.status(HttpStatusCodes.OK).json({
+                  code: 200,
+                  message: "查询成功",
+                  data: {
+                      data: results,
+                      categoryName: (name.results[0] as { name: string }).name,
+                      categoryDescription: (name.results[0] as { description: string }).description,
+                  },
+              })
+            : res.status(HttpStatusCodes.OK).json({ code: 404, message: "查询成功，但没有该分类", data: null });
+    } catch (e) {
+        console.log(e);
+        if (e instanceof SQLError)
+            return res
+                .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
+        else return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: "[UNKNOWN ERROR]" });
+    }
+}
+
 export default {
     getAll,
     getById,
     getByTitleURL,
+    getCategoryByTitleURL,
+    getCategoryByCategoryTitleURL,
 } as const;

@@ -14,7 +14,7 @@ function ArticleItem(props: prop) {
     const { id, title, content, username, lastUpdate, titleURL } = props;
     return (
         <>
-            <div className="flex p-8 bg-slate-200 flex-col rounded-lg m-5 group">
+            <div className="flex p-8 bg-slate-200 flex-col rounded-lg my-5 group w-full">
                 <a href={`/blogs/${titleURL}`} className="block w-fit p-1 rounded-lg font-sans font-semibold md:text-2xl text-base text-blue-500 transition-all hover:bg-slate-300">{title}</a>
                 <div className="group-hover:w-full group-hover:bg-blue-500 h-0.5 mt-1 bg-gray-700 w-1/2 transition-all duration-200" />
                 <div className="flex flex-row mt-3">

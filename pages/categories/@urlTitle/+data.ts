@@ -1,19 +1,15 @@
 import axios from "axios";
 import type { PageContextServer } from "vike/types";
-import type { Article, ArticleCategories } from "../../types";
 import { render } from "vike/abort";
+import { Article } from "../types";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 
 export const data = async (pageContext: PageContextServer) => {
     try {
-        const res = await axios.get(import.meta.env.BASE_URL + "/blog/article/" + pageContext.routeParams.articleURL);
+        const res = await axios.get(import.meta.env.BASE_URL + "/blog/category/" + pageContext.routeParams.urlTitle);
         const articles = res.data.data as Article;
-        const categoriesRes = await axios.get(
-            import.meta.env.BASE_URL + "/blog/article/categories/" + pageContext.routeParams.articleURL
-        );
-        const categories = categoriesRes.data.data as ArticleCategories[];
-        return { ...articles, categories };
+        return { ...articles };
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 404) throw render(404, "Page not found");

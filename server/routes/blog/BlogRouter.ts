@@ -19,4 +19,8 @@ blogRouter.get(Paths.Blog.GetById, UserRoutes.getById);
 // blog/article/:titleURL
 blogRouter.get(Paths.Blog.GetByTitleURL, UserRoutes.getByTitleURL);
 
+blogRouter.get(Paths.Blog.GetCategoryByTitleURL, UserRoutes.getCategoryByTitleURL);
+
+blogRouter.get(Paths.Blog.GetCategoryByCategoryTitleURL, UserRoutes.getCategoryByCategoryTitleURL);
+
 export default blogRouter;

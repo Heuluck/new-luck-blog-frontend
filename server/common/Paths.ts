@@ -13,6 +13,9 @@ export default {
         Get: "/list",
         GetById: "/:id",
         GetByTitleURL: "/article/:titleURL",
+        //根据文章查询分类
+        GetCategoryByTitleURL: "/article/categories/:titleURL",
+        GetCategoryByCategoryTitleURL:"/category/:titleURL"
     },
     Users: {
         Base: "/users",
@@ -25,8 +28,8 @@ export default {
         Base: "/auth",
         Login: "/",
         Register: "/reg",
-        Logout:"/logout",
-        OAuth:{
+        Logout: "/logout",
+        OAuth: {
             Google: "/oauth/google",
             Facebook: "/oauth/facebook",
             Github: "/oauth/github",
@@ -38,7 +41,7 @@ export default {
             Slack: "/oauth/slack",
             Reddit: "/oauth/reddit",
             Twitch: "/oauth/twitch",
-            Gitlab:"/oauth/gitlab",
-        }
+            Gitlab: "/oauth/gitlab",
+        },
     },
 } as const;
