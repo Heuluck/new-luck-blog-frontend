@@ -64,17 +64,21 @@ export default function Page() {
                     </div>
                     <p>OAuth 第三方登录</p>
                 </div>
-                <Progress percent={step == 0 ? 20 : step == 1 ? 60 : 100} status={error ? "exception" : "active"} />
+                <Progress
+                    percent={step == 0 ? 20 : step == 1 ? 60 : 100}
+                    status={error ? "exception" : message ? "success" : "active"}
+                />
                 <div className="flex flex-col items-center justify-center m-4" ref={parent}>
-                    {error && <Alert message={error} type="error" showIcon />}
-                    {message && <Alert message={message} type="success" showIcon />}
+                    {(error || message) && (
+                        <Alert message={error ?? message} type={error ? "error" : "success"} showIcon />
+                    )}
                     <ul className="p-2 rounded-lg m-1 text-lg text-gray-700" ref={listParent}>
                         <li>
                             获取授权码 <Spin className="ml-1" size="small" percent={code && code != "" ? 100 : 1} />
                         </li>
                         {step > 0 && (
                             <li>
-                                请求令牌与数据{" "}
+                                请求访问令牌与数据{" "}
                                 <Spin className="ml-1" size="small" percent={step > 1 ? 100 : error ? 1 : 0} />
                             </li>
                         )}

@@ -5,7 +5,6 @@ import dbQuery, { InsertResult } from "@server/database/connection";
 import { IReq, IRes } from "../types/express/misc";
 import { signJWT } from "@server/util/jwt";
 import { User } from "../types/user";
-import { parseQueryToJSON } from "@server/util/parse";
 import OAuth from "./OAuth";
 import { SQLError, UserError } from "@server/common/Errors";
 
@@ -154,26 +153,27 @@ async function OAuthGithub(req: IReq<{ code: string }>, res: IRes) {
     const { code } = req.body;
     if (!code) return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "code不能为空" });
     try {
-        const accessRes = await axios.post("https://github.com/login/oauth/access_token", {
-            client_id: process.env.GITHUB_CLIENT_ID,
-            client_secret: process.env.GITHUB_CLIENT_SECRET,
-            code,
-            headers: {
-                Accept: "application/json",
+        const accessRes = await axios.post(
+            "https://github.com/login/oauth/access_token",
+            {
+                client_id: process.env.GITHUB_CLIENT_ID,
+                client_secret: process.env.GITHUB_CLIENT_SECRET,
+                code,
             },
-        });
-        if (parseQueryToJSON(accessRes.data).error)
+            {
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+        if (accessRes.data.error)
             //Github返回错误
-            return res
-                .status(HttpStatusCodes.BAD_REQUEST)
-                .json({ code: 400, message: parseQueryToJSON(accessRes.data).error });
-        else if (
-            parseQueryToJSON(accessRes.data).access_token &&
-            parseQueryToJSON(accessRes.data).scope.indexOf("email") != -1
-        ) {
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: accessRes.data.error });
+        else if (accessRes.data.access_token && accessRes.data.scope.indexOf("email") != -1) {
+            console.log(accessRes.data);
             const userInfoRes = await axios.get("https://api.github.com/user", {
                 headers: {
-                    Authorization: `token ${parseQueryToJSON(accessRes.data).access_token}`,
+                    Authorization: `token ${accessRes.data.access_token}`,
                     Accept: "application/json",
                 },
             });
@@ -278,6 +278,8 @@ async function OAuthGithub(req: IReq<{ code: string }>, res: IRes) {
                                 .json({ code: 500, message: "FATAL ERROR" });
                     }
             }
+        } else {
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "Invalid request" });
         }
     } catch (err) {
         if (axios.isAxiosError(err))
