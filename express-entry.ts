@@ -1,3 +1,4 @@
+import "@server/pre-start"
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,13 +8,6 @@ import { vikeHandler } from "./server/vike-handler";
 import { createMiddleware } from "@universal-middleware/express";
 import express from "express";
 import Paths from "@server/common/Paths";
-
-const result2 = dotenv.config({
-    path: "./server/env/.env",
-});
-if (result2.error) {
-    throw result2.error;
-}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
