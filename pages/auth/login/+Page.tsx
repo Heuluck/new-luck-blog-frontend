@@ -85,7 +85,7 @@ export default function Login() {
                                 cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue`}
                             />
                             <a
-                                href="https://github.com/login/oauth/authorize?client_id=Ov23liaRKgRtzPQJ34zp&scope=user:email,read:user"
+                                href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.PUBLIC_ENV__CLIENT_ID}&scope=user:email`}
                                 className={`flex items-center justify-center overflow-visible select-none my-2 bg-zinc-100 hover:bg-gray-50 active:bg-gray-200 transition-all 
                                 cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue`}>
                                 <span>使用 Github 登录</span>

@@ -44,6 +44,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "@types/cors": "^2.8.17",
     "@types/crypto-js": "^4.2.2",
     "@types/jsonwebtoken": "^9.0.6",
