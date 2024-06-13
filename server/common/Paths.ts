@@ -23,8 +23,9 @@ export default {
     },
     Auth: {
         Base: "/auth",
-        REST: "/",
+        Login: "/",
         Register: "/reg",
+        Logout:"/logout",
         OAuth:{
             Google: "/oauth/google",
             Facebook: "/oauth/facebook",

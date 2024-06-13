@@ -5,6 +5,7 @@ import React from "react";
 import { TabLink } from "../components/TabLink";
 import { getCookie } from "@utils/client/cookie";
 import { usePageContext } from "vike-react/usePageContext";
+import { logout } from "@utils/client/requests/main";
 
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
     const pageContext = usePageContext();
@@ -23,13 +24,30 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                     className="p-4 px-6 hidden md:flex justify-center items-center text-sm text-gray-400 hover:bg-gray-600 active:bg-gray-950">
                     老博客
                 </a>
-                {pageContext.user?.type === "admin" && (
-                    <a
-                        className="hidden md:flex justify-center items-center ml-auto text-sm text-gray-400"
-                        href="/dashboard">
-                        <span className="p-2 rounded-lg transition-all hover:bg-slate-600">控制台</span>
-                    </a>
-                )}
+                <div className="ml-auto flex">
+                    {pageContext.user?.type === "admin" && (
+                        <a
+                            className="hidden md:flex justify-center items-center mx-1 text-sm text-gray-400"
+                            href="/dashboard">
+                            <span className="p-2 rounded-lg transition-all hover:bg-slate-600">控制台</span>
+                        </a>
+                    )}
+                    {pageContext.user ? (
+                        <button
+                            className="hidden md:flex justify-center items-center mx-1 text-sm text-gray-400"
+                            onClick={() => {
+                                logout();
+                            }}>
+                            <span className="p-2 rounded-lg transition-all hover:bg-slate-600">退出登录</span>
+                        </button>
+                    ) : (
+                        <a
+                            className="hidden md:flex justify-center items-center mx-1 text-sm text-gray-400"
+                            href="/auth/login">
+                            <span className="p-2 rounded-lg transition-all hover:bg-slate-600">登录</span>
+                        </a>
+                    )}
+                </div>
             </TopBar>
             <Content>{children}</Content>
         </div>

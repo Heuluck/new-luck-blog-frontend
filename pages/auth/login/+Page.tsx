@@ -5,8 +5,6 @@ import axios, { AxiosError } from "axios";
 import { message } from "antd";
 import CryptoJS from "crypto-js";
 import "./animation.css";
-import { AuthResponse } from "types/request";
-import { setCookie } from "@utils/client/cookie";
 import { MessageInstance } from "antd/es/message/interface";
 
 export default function Login() {
@@ -123,20 +121,18 @@ const submitHandler = async (
                     password: CryptoJS.SHA256(password).toString(),
                 });
                 if (res.data.code === 200) {
-                    const data = res.data as AuthResponse;
+                    const { type } = res.data.data;
                     messageApi.open({
                         type: "success",
-                        content: "登录成功",
+                        content: res.data.message,
                     });
-                    console.log(data.token);
-                    setCookie("token", data.token, 1);
                     setTimeout(() => {
-                        window.location.href = "/dashboard";
-                    }, 1000);
+                        type === "admin" ? (window.location.href = "/dashboard") : (window.location.href = "/");
+                    }, 700);
                 } else {
                     messageApi.open({
                         type: "warning",
-                        content: "用户名或密码错误",
+                        content: res.data.message,
                     });
                 }
             } catch (error) {
@@ -144,7 +140,7 @@ const submitHandler = async (
                     if (error.response?.status === 401)
                         messageApi.open({
                             type: "warning",
-                            content: "用户名或密码错误",
+                            content: error.response?.data.message,
                         });
                     else {
                         messageApi.open({
@@ -177,15 +173,13 @@ const submitHandler = async (
                 });
                 console.log(res.data);
                 if (res.data.code === 200) {
-                    const data = res.data as AuthResponse;
-                    setCookie("token", data.token, 1);
                     messageApi.open({
                         type: "success",
                         content: "注册成功",
                     });
                     setTimeout(() => {
                         window.location.href = "/";
-                    }, 1000);
+                    }, 700);
                 }
             } catch (error) {
                 if (axios.isAxiosError(error)) {

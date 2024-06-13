@@ -1,4 +1,5 @@
 import { deleteCookie } from "@utils/client/cookie";
+import { logout } from "@utils/client/requests/main";
 
 export default function Page() {
     return (
@@ -7,10 +8,7 @@ export default function Page() {
                 早上好
                 <button
                     onClick={() => {
-                        deleteCookie("token");
-                        setTimeout(() => {
-                            window.location.href = "/";
-                        }, 500);
+                        logout("/")
                     }}>
                     退出登录
                 </button>

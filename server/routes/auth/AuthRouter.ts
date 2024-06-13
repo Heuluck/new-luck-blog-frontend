@@ -12,7 +12,7 @@ import AuthRoutes from "./AuthRoutes";
 const authRouter = Router();
 
 authRouter.post(
-    Paths.Auth.REST,
+    Paths.Auth.Login,
     // validate(["name", "string", "body"], ["password", "string", "body"]),
     AuthRoutes.Login
 );
@@ -22,6 +22,8 @@ authRouter.post(
     // validate(["name", "string", "body"], ["password", "string", "body"], ["email", "string", "body"]),
     AuthRoutes.Register
 );
+
+authRouter.get(Paths.Auth.Logout, AuthRoutes.Logout);
 
 authRouter.post(Paths.Auth.OAuth.Github, AuthRoutes.OAuthGithub);
 

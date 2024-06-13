@@ -15,6 +15,7 @@ export function getCookie(name: string): string | null {
     return null;
 }
 
+/** 注意：无法删除HTTPOnly的cookie */
 export function deleteCookie(name: string, path?: string): void {
     document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=${path ?? "/"};`;
 }
