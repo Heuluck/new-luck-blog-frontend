@@ -1,9 +1,7 @@
 import { Router } from "express";
-import jetValidator from "jet-validator";
+// import jetValidator from "jet-validator";
 import Paths from "../../common/Paths";
 import AuthRoutes from "./AuthRoutes";
-import dbQuery from "@server/database/connection";
-import { IRes } from "../types/express/misc";
 
 // **** Variables **** //
 

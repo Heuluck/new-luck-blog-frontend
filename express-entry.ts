@@ -1,4 +1,4 @@
-import "@server/pre-start"
+import "@server/pre-start";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -8,6 +8,9 @@ import { vikeHandler } from "./server/vike-handler";
 import { createMiddleware } from "@universal-middleware/express";
 import express from "express";
 import Paths from "@server/common/Paths";
+import { renderPage } from "vike/server";
+import cookieParser from "cookie-parser";
+import auth from "./server/services/authProvider";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,7 +20,11 @@ const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const hmrPort = process.env.HMR_PORT ? parseInt(process.env.HMR_PORT, 10) : 24678;
 
 interface Middleware<Context extends Record<string | number | symbol, unknown>> {
-    (request: Request, context: Context): Response | void | Promise<Response> | Promise<void>;
+    (
+        request: Request,
+        context: Context,
+        rawRequest: Record<string, unknown>
+    ): Response | void | Promise<Response> | Promise<void>;
 }
 
 export function handlerAdapter<Context extends Record<string | number | symbol, unknown>>(
@@ -27,15 +34,13 @@ export function handlerAdapter<Context extends Record<string | number | symbol, 
         async (context) => {
             const rawRequest = context.platform.request as unknown as Record<string, unknown>;
             rawRequest.context ??= {};
-            const response = await handler(context.request, rawRequest.context as Context);
-
+            const response = await handler(context.request, rawRequest.context as Context, rawRequest);
             if (!response) {
                 context.passThrough();
                 return new Response("", {
                     status: 404,
                 });
             }
-
             return response;
         },
         {
@@ -64,22 +69,17 @@ async function startServer() {
         ).middlewares;
         app.use(viteDevMiddleware);
     }
-    app.use(express.json()); // 对于 JSON 格式的数据
+    app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use(cookieParser());
+    auth(app);
     app.use(Paths.Base, BaseRouter);
-    // app.get(
-    //     "/api/ping",
-    //     (_, res) => {
-    //         return res.status(200).json({ msg: "pong" });
-    //     }
-    // );
     /**
      * Vike route
      *
      * @link {@see https://vike.dev}
      **/
-    app.all("*", handlerAdapter(vikeHandler));
-
+    app.get("*", handlerAdapter(vikeHandler));
     app.listen(port, () => {
         console.log(`Server listening on http://localhost:${port}`);
     });

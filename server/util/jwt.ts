@@ -20,14 +20,14 @@ export const verifyJWT = (token: string): Promise<string> => {
         try {
             jwt.verify(token, publicKey, function (err, decoded) {
                 if (err) {
-                    console.log("Error: ", err);
+                    console.log("[JWT] - ", err.message);
                     reject(err);
                 } else {
                     resolve(JSON.stringify(decoded)!);
                 }
             });
         } catch (err) {
-            console.log("Error: ", err);
+            console.log("[JWT ERROR] - ", err);
             reject(err);
         }
     });

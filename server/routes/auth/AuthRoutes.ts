@@ -24,7 +24,18 @@ async function Login(req: IReq<{ name: string; password: string }>, res: IRes) {
                     "1d"
                 ).then(
                     (token) => {
-                        return res.status(HttpStatusCodes.OK).json({ code: 200, message: "登录成功", token });
+                        return res.status(HttpStatusCodes.OK).json({
+                            code: 200,
+                            message: "登录成功",
+                            token,
+                            user: {
+                                id: user.id,
+                                name: user.name,
+                                email: user.email,
+                                type: user.type,
+                                avatar: user.avatar,
+                            },
+                        });
                     },
                     (err) => {
                         console.log(err);

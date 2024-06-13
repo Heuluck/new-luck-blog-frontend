@@ -12,5 +12,6 @@ export default {
   extends: vikeReact,
   passToClient: [
     'headers',
+    'user'
   ]
 } satisfies Config;
