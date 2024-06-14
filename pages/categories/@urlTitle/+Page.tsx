@@ -2,15 +2,24 @@ import { useData } from "vike-react/useData";
 import type { Data } from "./+data.js";
 import ArticleItem from "../../../components/Blog/Index/article.jsx";
 import { usePageContext } from "vike-react/usePageContext";
+import { DefaultBreadcrumb, SlateBgBreadcrumb } from "@components/button/breadcrumb.jsx";
 
 export default function Page() {
-    const blogs = useData<Data>();
+    const category = useData<Data>();
     return (
         <div className="flex flex-col w-full">
-            <h1 className="block w-full text-center text-3xl font-bold">分类文章：{blogs.categoryName}</h1>
-            <p className="block w-full text-center text-lg my-3">{blogs.categoryDescription}</p>
+            <SlateBgBreadcrumb
+                    list={[
+                        { url: "/", title: "首页" },
+                        { url: "/categories", title: "标签" },
+                        { title: category.categoryName },
+                    ]}
+                    displayBack
+                />
+            <h1 className="block w-full text-center text-3xl font-bold">分类文章：{category.categoryName}</h1>
+            <p className="block w-full text-center text-lg my-3">{category.categoryDescription}</p>
             <div className="w-full">
-                {blogs.data.map(({ id, title, content, titleURL, username, lastUpdate }) => (
+                {category.data.map(({ id, title, content, titleURL, username, lastUpdate }) => (
                     <ArticleItem
                         key={id}
                         id={id}
