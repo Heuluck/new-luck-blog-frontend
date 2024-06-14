@@ -4,7 +4,7 @@ const guard: GuardAsync = async (pageContext: PageContext): ReturnType<GuardAsyn
     if (!pageContext.user) {
         throw render(401, "您还没有登录");
     } else if (pageContext.user?.type !== "admin") {
-        throw render(401, "您似乎没有控制台权限");
+        throw render(401, "您似乎没有仪表盘权限");
     }
 };
 export { guard };

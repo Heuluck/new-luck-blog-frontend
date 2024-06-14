@@ -1,3 +1,3 @@
 export function title() {
-  return `控制台`;
+  return `仪表盘`;
 }

@@ -1,6 +1,7 @@
 import "../tailwind.css";
 import React from "react";
 import { TabLink } from "../../components/DashboardTabLink";
+import { logout } from "@utils/client/requests/main";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -13,6 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </a>
                 <TabLink href="/dashboard">首页</TabLink>
                 <TabLink href="/dashboard/Articles">文章列表</TabLink>
+                <TabLink onClick={()=>logout("/")}>退出登录 </TabLink>
             </LeftBar>
             <Content>{children}</Content>
         </div>

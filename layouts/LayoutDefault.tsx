@@ -14,7 +14,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
             <TopBar>
                 {pageContext.urlPathname === "/" ? (
                     <div className="cursor-pointer select-none rounded-lg p-1 m-2 ml-4 px-3
-                        mr-10 transition-all hover:scale-105 active:scale-95 hover:bg-gray-100 flex flex-col">
+                        mr-10 transition-all scale-105 hover:scale-110 active:scale-100 hover:bg-gray-100 flex flex-col">
                         <span className="text-orange-600 font-bold text-xl">Heuluck的新博客</span>
                         <span className="text-xs mt-0.5 block">—— 随便写的</span>
                     </div>
@@ -22,7 +22,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                     <a
                         href="/"
                         className="cursor-pointer select-none rounded-lg p-1 m-2 ml-4 px-3
-                        mr-10 transition-all hover:scale-105 active:scale-95 hover:bg-gray-100 flex flex-col">
+                        mr-10 transition-all scale-105 hover:scale-110 active:scale-100 hover:bg-gray-100 flex flex-col">
                         <span className="text-orange-600 font-bold text-xl">Heuluck的新博客</span>
                         <span className="text-xs mt-0.5 block">—— 随便写的</span>
                     </a>
@@ -41,7 +41,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                         <a
                             className="hidden md:flex justify-center items-center mx-1 text-sm text-gray-500 hover:text-gray-950"
                             href="/dashboard">
-                            <span className="p-2 rounded-lg transition-all hover:bg-gray-200">控制台</span>
+                            <span className="p-2 rounded-lg transition-all hover:bg-gray-200">仪表盘</span>
                         </a>
                     )}
                     {pageContext.user ? (

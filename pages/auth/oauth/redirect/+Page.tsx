@@ -21,7 +21,7 @@ export default function Page() {
                     setStep(2);
                     const user: User = res.data.data;
                     setMessage(
-                        `${res.data.message}，欢迎 ${user.name}！\n即将跳转到${user.type === "admin" ? "控制台" : "首页"}`
+                        `${res.data.message}，欢迎 ${user.name}！\n即将跳转到${user.type === "admin" ? "仪表盘" : "首页"}`
                     );
                     setTimeout(() => {
                         user.type === "admin" ? (window.location.href = "/dashboard") : (window.location.href = "/");
