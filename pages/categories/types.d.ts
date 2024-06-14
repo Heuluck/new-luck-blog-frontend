@@ -11,3 +11,10 @@ export type Article = {
     categoryDescription: string;
     [property: string]: any;
 };
+
+export type Categories = {
+    id: number;
+    name: string;
+    url_title: string;
+    description: string;
+};

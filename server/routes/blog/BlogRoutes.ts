@@ -56,6 +56,26 @@ async function getByTitleURL(req: IReq, res: IRes) {
     );
 }
 
+async function getCategories(_: IReq, res: IRes) {
+    try {
+        const { results } = await dQuery(
+            `
+SELECT * FROM blog_categories;`,
+            []
+        );
+        return results.constructor === Array && results.length >= 0
+            ? res.status(HttpStatusCodes.OK).json({ code: 200, message: "查询成功", data: results })
+            : res.status(HttpStatusCodes.NOT_FOUND).json({ code: 500, message: "查询失败" });
+    } catch (e) {
+        console.log(e);
+        if (e instanceof SQLError)
+            return res
+                .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
+        else return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: "[UNKNOWN ERROR]" });
+    }
+}
+
 async function getCategoryByTitleURL(req: IReq, res: IRes) {
     const titleURL = req.params.titleURL;
     try {
@@ -94,7 +114,8 @@ INNER JOIN article_blog_categories art_bc
 ON art_bc.article_id = art.id
 INNER JOIN blog_categories bc
 ON bc.id = art_bc.blog_category_id
-WHERE bc.url_title = ?;`,
+WHERE bc.url_title = ?
+ORDER BY art.lastUpdate DESC;`,
             [titleURL]
         );
         const name = await dQuery(`SELECT name,description FROM blog_categories WHERE url_title = ?;`, [titleURL]);
@@ -126,6 +147,7 @@ export default {
     getAll,
     getById,
     getByTitleURL,
+    getCategories,
     getCategoryByTitleURL,
     getCategoryByCategoryTitleURL,
 } as const;

@@ -13,6 +13,7 @@ export default {
         Get: "/list",
         GetById: "/:id",
         GetByTitleURL: "/article/:titleURL",
+        GetCategories: "/category/categories/",
         //根据文章查询分类
         GetCategoryByTitleURL: "/article/categories/:titleURL",
         GetCategoryByCategoryTitleURL:"/category/:titleURL"
