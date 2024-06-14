@@ -56,7 +56,7 @@ export default function Page() {
         <>
             <div
                 className="mb-32 md:mb-0 rounded-2xl w-11/12 md:w-6/12 shadow-2xl overflow-hidden normal-1
-            flex items-center flex-col m-0 bg-gray-200 p-8">
+            flex items-center flex-col m-0 bg-white p-8">
                 <div className="flex flex-col justify-center items-center m-5">
                     <div className="flex flex-row justify-center items-center">
                         <img src="/github-mark.svg" className="h-10" />

@@ -16,7 +16,7 @@ export default function Page() {
             />
             <h1 className="block w-full text-center text-3xl font-bold">全部标签</h1>
             <div className="w-full">
-                <div className="flex p-8 bg-slate-200 flex-row flex-wrap rounded-lg my-5 group w-full">
+                <div className="flex p-8 bg-white flex-row flex-wrap rounded-lg my-5 group w-full group border-dashed border border-gray-500">
                     {items.map(({ id, name, url_title, description }) => (
                         <CategoryPageButton key={id} name={name} url_title={url_title} />
                     ))}

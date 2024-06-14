@@ -13,14 +13,16 @@ export function TabLink({ href, children }: { href: string; children: string }) 
         return (
             <a
                 href={href}
-                className="select-none hidden p-4 px-6 md:flex justify-center items-center text-sm transition-all text-gray-400 hover:bg-gray-600 active:bg-gray-950">
+                className="select-none hidden p-4 px-6 md:flex justify-center items-center text-base transition-all
+                text-gray-600 hover:bg-orange-100/75 active:bg-orange-600/75 hover:text-gray-950 active:text-gray-100 font-bold">
                 {children}
             </a>
         );
     else
         return (
             <span
-                className="select-none hidden p-4 px-6 md:flex justify-center items-center text-sm transition-all bg-sky-500 text-white cursor-pointer active:bg-sky-600" >
+                className="select-none hidden p-4 px-6 md:flex justify-center items-center text-base transition-all
+                bg-orange-500/75 text-white cursor-pointer active:bg-orange-600/75 font-bold">
                 {children}
             </span>
         );

@@ -33,13 +33,13 @@ export default function Login() {
     };
 
     return (
-        <>
+        <div className="overflow-hidden w-screen h-screen flex items-center justify-center">
             {contextHolder}
             <div
                 className={`mb-32 md:mb-0 rounded-2xl w-10/12 md:w-8/12 shadow-2xl overflow-hidden normal-1
             flex flex-col ${toNextAnimeMiddle ? "md:flex-row-reverse" : "md:flex-row"} m-0 ${toNext !== 0 && (toNext === 2 ? "rotate-next" : "rotate-prev")}`}>
                 <img src={xiaoXuQiu} className="w-full h-56 md:h-auto object-cover object-bottom md:w-1/2" />
-                <div className="bg-gray-200 w-full p-8 px-0">
+                <div className="bg-white w-full p-8 px-0 max-h-[90vh] overflow-y-auto">
                     <h1 className="font-serif text-2xl text-center">{toNextAnimeMiddle ? "Sign Up" : "Sign In"}</h1>
                     <form
                         className="m-8 items-center flex flex-col"
@@ -74,20 +74,20 @@ export default function Login() {
                             <input
                                 type="submit"
                                 value={toNextAnimeMiddle ? "注册" : "登录"}
-                                className={`my-2 bg-blue-500 hover:bg-blue-400 active:bg-blue-600 transition-all
-                                cursor-pointer text-white p-2 px-5 w-full rounded-lg active:ani-wave-blue`}
+                                className="my-2 bg-orange-400 hover:bg-orange-300 active:bg-orange-500 transition-all
+                                cursor-pointer text-white p-2 px-5 w-full rounded-lg active:ani-wave-blue"
                             />
                             <input
                                 type="button"
                                 value={toNextAnimeMiddle ? "登录" : "注册"}
                                 onClick={toAnother}
-                                className={`my-2 bg-zinc-100 hover:bg-gray-50 active:bg-gray-200 transition-all
+                                className={`my-2 bg-white hover:bg-gray-200 active:bg-gray-300  transition-all
                                 cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue`}
                             />
                             <a
                                 href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.PUBLIC_ENV__CLIENT_ID}&scope=user:email`}
-                                className={`flex items-center justify-center overflow-visible select-none my-2 bg-zinc-100 hover:bg-gray-50 active:bg-gray-200 transition-all 
-                                cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue`}>
+                                className="flex items-center justify-center overflow-visible select-none my-2 bg-white hover:bg-gray-200 active:bg-gray-300 transition-all 
+                                cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue">
                                 <span>使用 Github 登录</span>
                                 <img src="/github-mark.svg" className="mx-2 object-contain aspect-square h-5" />
                             </a>
@@ -95,7 +95,7 @@ export default function Login() {
                     </form>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

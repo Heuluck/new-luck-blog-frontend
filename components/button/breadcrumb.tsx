@@ -51,7 +51,7 @@ export function SlateBgBreadcrumb({ list, displayBack, className }: Props) {
                 {displayBack && (
                     <a
                         className="px-2 py-1 text-gray-500 mx-1 text-sm transition-all duration-200 rounded-lg
-                        hover:text-gray-950 hover:bg-gray-400 mr-4 cursor-pointer select-none"
+                        hover:text-gray-950 hover:bg-gray-300 mr-4 cursor-pointer select-none"
                         onClick={() => window.history.go(-1)}>
                         {"<"} Back
                     </a>
@@ -62,13 +62,13 @@ export function SlateBgBreadcrumb({ list, displayBack, className }: Props) {
                             {url ? (
                                 <a
                                     href={url}
-                                    className="px-1.5 py-1 text-gray-500 mx-1 transition-all duration-200 rounded-lg
-                        text-sm hover:text-gray-950 hover:bg-gray-400 cursor-pointer select-none">
+                                    className="p-1.5 text-gray-500 mx-1 transition-all duration-200 rounded-lg
+                        text-sm hover:text-gray-950 hover:bg-gray-300 cursor-pointer select-none">
                                     {title}
                                 </a>
                             ) : (
                                 <span
-                                    className="px-1.5 py-1 text-gray-500 mx-1 transition-all duration-200 rounded-lg
+                                    className="p-1.5 text-gray-500 mx-1 transition-all duration-200 rounded-lg
                     text-sm select-none">
                                     {title}
                                 </span>

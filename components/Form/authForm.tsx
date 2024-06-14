@@ -19,7 +19,7 @@ function Item(props: prop) {
                 onChange={onChange}
                 type={type}
                 placeholder={description}
-                className="p-3 bg-gray-100 hover:bg-white transition-all duration-300 px-5 w-full rounded-lg focus-visible:outline-none"
+                className="p-3 border border-solid border-gray-400 bg-gray-50 active:bg-white hover:bg-white transition-all duration-300 px-5 w-full rounded-lg focus-visible:outline-none"
             />
         </div>
     );
