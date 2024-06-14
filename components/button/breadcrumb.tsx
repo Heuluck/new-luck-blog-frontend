@@ -3,14 +3,14 @@ interface Props {
         url?: string;
         title: string;
     }[];
-    displayBack: boolean;
+    displayBack?: boolean;
     className?: string;
 }
 
 export function DefaultBreadcrumb({ list, displayBack, className }: Props) {
     return (
         <>
-            <div className={`flex flex-row mb-5 ${className}`}>
+            <div className={`flex flex-row mb-5 ${className} flex-wrap items-center`}>
                 {displayBack && (
                     <a
                         className="px-2 py-1 text-gray-500 mx-1 text-sm transition-all duration-200 rounded-lg
@@ -47,7 +47,7 @@ export function DefaultBreadcrumb({ list, displayBack, className }: Props) {
 export function SlateBgBreadcrumb({ list, displayBack, className }: Props) {
     return (
         <>
-            <div className={`flex flex-row mb-5 ${className}`}>
+            <div className={`flex flex-row mb-5 ${className} flex-wrap items-center`}>
                 {displayBack && (
                     <a
                         className="px-2 py-1 text-gray-500 mx-1 text-sm transition-all duration-200 rounded-lg

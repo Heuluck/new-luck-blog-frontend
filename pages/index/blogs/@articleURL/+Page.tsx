@@ -4,23 +4,18 @@ import type { Data } from "./+data.js";
 import Markdown from "react-markdown";
 import dayjs from "dayjs";
 import { CategoryButton } from "@components/button/category.jsx";
-import { DefaultBreadcrumb } from "./../../../../components/button/breadcrumb";
+import { DefaultBreadcrumb, SlateBgBreadcrumb } from "./../../../../components/button/breadcrumb";
 import { PageContext } from "vike/types";
 
 export default function Page(pageContext: PageContext) {
     const articleData = useData<Data>();
     return (
-        <>
-            <div className="flex p-8 pt-4 bg-slate-200 flex-col rounded-lg group md:w-9/12 w-full">
-                <DefaultBreadcrumb
-                    list={[
-                        { url: "/", title: "首页" },
-                        {title:"文章"},
-                        { title: articleData.title },
-                    ]}
-                    className="-translate-x-6"
-                    displayBack
-                />
+        <div className="flex flex-col md:w-9/12 w-full">
+            <SlateBgBreadcrumb
+                list={[{ url: "/", title: "首页" }, { title: "文章" }, { title: articleData.title }]}
+                displayBack
+            />
+            <div className="flex p-8 bg-slate-200 flex-col rounded-lg group w-full">
                 <h1 className="font-bold md:text-2xl text-base text-blue-500 ">{articleData.title}</h1>
                 <div className="group-hover:w-full group-hover:bg-blue-500 h-0.5 mt-1 bg-gray-700 w-1/2 transition-all duration-200" />
                 <div className="flex flex-row mt-3">
@@ -76,6 +71,6 @@ export default function Page(pageContext: PageContext) {
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
