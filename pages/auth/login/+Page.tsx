@@ -6,6 +6,7 @@ import { message } from "antd";
 import CryptoJS from "crypto-js";
 import "./animation.css";
 import { MessageInstance } from "antd/es/message/interface";
+import { Button } from "@components/button/button";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -23,12 +24,12 @@ export default function Login() {
             setToNext(2);
             setTimeout(() => {
                 setToNextAnimeMiddle(true);
-            }, 700);
+            }, 500);
         } else {
             setToNext(1);
             setTimeout(() => {
                 setToNextAnimeMiddle(false);
-            }, 700);
+            }, 500);
         }
     };
 
@@ -41,12 +42,7 @@ export default function Login() {
                 <img src={xiaoXuQiu} className="w-full h-56 md:h-auto object-cover object-bottom md:w-1/2" />
                 <div className="bg-white w-full p-8 px-0 max-h-[90vh] overflow-y-auto">
                     <h1 className="font-serif text-2xl text-center">{toNextAnimeMiddle ? "Sign Up" : "Sign In"}</h1>
-                    <form
-                        className="m-8 items-center flex flex-col"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            submitHandler(toNextAnimeMiddle, username, password, confirmPassword, email, messageApi);
-                        }}>
+                    <form className="m-8 items-center flex flex-col">
                         <AuthForm.Item
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -71,26 +67,32 @@ export default function Login() {
                             </>
                         )}
                         <div className="my-4 flex flex-col w-9/12">
-                            <input
-                                type="submit"
-                                value={toNextAnimeMiddle ? "注册" : "登录"}
-                                className="my-2 bg-orange-400 hover:bg-orange-300 active:bg-orange-500 transition-all
-                                cursor-pointer text-white p-2 px-5 w-full rounded-lg active:ani-wave-blue"
-                            />
-                            <input
-                                type="button"
-                                value={toNextAnimeMiddle ? "登录" : "注册"}
-                                onClick={toAnother}
-                                className={`my-2 bg-white hover:bg-gray-200 active:bg-gray-300  transition-all
-                                cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue`}
-                            />
-                            <a
+                            <Button
+                                block
+                                size="large"
+                                color="primary"
+                                onClick={() =>
+                                    submitHandler(
+                                        toNextAnimeMiddle,
+                                        username,
+                                        password,
+                                        confirmPassword,
+                                        email,
+                                        messageApi
+                                    )
+                                }>
+                                {toNextAnimeMiddle ? "注册" : "登录"}
+                            </Button>
+                            <Button block size="large" onClick={toAnother}>
+                                {toNextAnimeMiddle ? "登录" : "注册"}
+                            </Button>
+                            <Button
+                                className="flex items-center justify-center"
                                 href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.PUBLIC_ENV__CLIENT_ID}&scope=user:email`}
-                                className="flex items-center justify-center overflow-visible select-none my-2 bg-white hover:bg-gray-200 active:bg-gray-300 transition-all 
-                                cursor-pointer text-black p-2 px-5 w-full rounded-lg border-gray-300 border-solid border active:ani-wave-blue">
+                                size="large">
                                 <span>使用 Github 登录</span>
                                 <img src="/github-mark.svg" className="mx-2 object-contain aspect-square h-5" />
-                            </a>
+                            </Button>
                         </div>
                     </form>
                 </div>

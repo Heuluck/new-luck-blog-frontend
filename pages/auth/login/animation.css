@@ -38,12 +38,12 @@
 
 .rotate-next {
     animation:
-        rotateToNext 0.7s ease-in,
-        rotateToPrev 0.7s ease-out 0.7s;
+        rotateToNext 0.5s ease-in,
+        rotateToPrev 0.5s ease-out 0.5s;
 }
 
 .rotate-prev {
     animation:
-        rotateToNext-1 0.7s ease-in,
-        rotateToPrev-1 0.7s ease-out 0.7s;
+        rotateToNext-1 0.5s ease-in,
+        rotateToPrev-1 0.5s ease-out 0.5s;
 }

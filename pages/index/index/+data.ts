@@ -7,7 +7,6 @@ export const data = async () => {
     try {
         const res = await axios.get(import.meta.env.BASE_URL + "/blog/list");
         const articles = res.data.data as Article[];
-        console.log(res.data.data);
         return articles;
     } catch (error) {
         if (axios.isAxiosError(error)) {

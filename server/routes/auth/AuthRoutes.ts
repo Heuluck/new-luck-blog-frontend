@@ -170,7 +170,6 @@ async function OAuthGithub(req: IReq<{ code: string }>, res: IRes) {
             //Github返回错误
             return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: accessRes.data.error });
         else if (accessRes.data.access_token && accessRes.data.scope.indexOf("email") != -1) {
-            console.log(accessRes.data);
             const userInfoRes = await axios.get("https://api.github.com/user", {
                 headers: {
                     Authorization: `token ${accessRes.data.access_token}`,

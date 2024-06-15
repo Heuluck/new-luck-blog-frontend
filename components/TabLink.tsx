@@ -14,7 +14,7 @@ export function TabLink({ href, children }: { href: string; children: string }) 
             <a
                 href={href}
                 className="select-none hidden p-4 px-6 md:flex justify-center items-center text-base transition-all
-                text-gray-600 hover:bg-orange-100/75 active:bg-orange-600/75 hover:text-gray-950 active:text-gray-100 font-bold">
+                text-gray-600 hover:bg-main-100/75 active:bg-main-600/75 hover:text-gray-950 active:text-gray-100 font-bold">
                 {children}
             </a>
         );
@@ -22,7 +22,7 @@ export function TabLink({ href, children }: { href: string; children: string }) 
         return (
             <span
                 className="select-none hidden p-4 px-6 md:flex justify-center items-center text-base transition-all
-                bg-orange-500/75 text-white cursor-pointer active:bg-orange-600/75 font-bold">
+                bg-main-500/75 text-white cursor-pointer active:bg-main-600/75 font-bold">
                 {children}
             </span>
         );

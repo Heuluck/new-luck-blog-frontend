@@ -1,21 +1,25 @@
-import { FC } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
-interface Props {
-    /**
-     * The size of the button
-     */
-    size?: "small" | "medium" | "large" | "xLarge";
-    /**
-     * The color of the button
-     */
-    color?: "primary" | "secondary" | "danger" | "common";
-    block?: boolean;
-    onClick?: () => void;
-    children?: React.ReactNode;
-}
+export const Button: FC<Props> = ({
+    size = "medium",
+    color = "common",
+    block,
+    onClick,
+    href,
+    className,
+    children,
+}: Props) => {
+    const [isActive, setIsActive] = useState(false);
 
-export const Button: FC<Props> = ({ size = "medium", color = "common", block, onClick, children }: Props) => {
-    const basicStyle = "my-2 transition-all cursor-pointer rounded-lg";
+    useEffect(() => {
+        if (isActive) {
+            setTimeout(() => {
+                setIsActive(false);
+            }, 700);
+        }
+    }, [isActive]);
+
+    const basicStyle = "inline-block flex-grow-0 flex-shrink-0 transition-all cursor-pointer rounded-lg";
     const sizeStyle = {
         small: "text-sm p-0.5 px-2",
         medium: "text-base p-1 px-[15px]",
@@ -23,16 +27,69 @@ export const Button: FC<Props> = ({ size = "medium", color = "common", block, on
         xLarge: "text-lg p-4 px-7",
     };
     const colorStyle = {
-        primary: "bg-orange-400 hover:bg-orange-300 active:bg-orange-500 text-white",
-        secondary: "bg-yellow-500 hover:bg-yellow-400 active:bg-yellow-600 text-white",
-        common: "bg-white hover:bg-gray-200 active:bg-gray-300 text-black border-gray-300 border-solid border",
+        primary: "bg-main-400 hover:bg-main-300 active:bg-main-500 text-white",
+        secondary: "bg-secondary-500 hover:bg-secondary-400 active:bg-secondary-600 text-white",
+        common: "bg-white hover:bg-gray-200 hover:border-main-400 active:bg-gray-300 text-black border-gray-300 border-solid border",
         danger: "bg-red-500 hover:bg-red-400 active:bg-red-600 text-white",
+    };
+    const activeColorStyle = {
+        primary: "animate-wave-main",
+        secondary: "animate-wave-secondary",
+        common: "animate-wave-main",
+        danger: "animate-wave-red",
     };
     const blockStyle = block ? "w-full" : "";
 
-    return (
-        <button type="button" onClick={onClick} className={`${basicStyle} ${sizeStyle[size]} ${colorStyle[color]} ${blockStyle}`}>
-            {children}
-        </button>
+    return href ? (
+        <div className={blockStyle}>
+            <a
+                href={href}
+                className={`${basicStyle} ${sizeStyle[size]} ${colorStyle[color]} ${blockStyle} ${className} ${isActive && activeColorStyle[color]}`}>
+                {children}
+            </a>
+        </div>
+    ) : (
+        <div className={blockStyle}>
+            <button
+                type="button"
+                onClick={() => {
+                    setIsActive(true);
+                    onClick && onClick();
+                }}
+                className={`${basicStyle} ${sizeStyle[size]} ${colorStyle[color]} ${blockStyle} ${className} ${isActive && activeColorStyle[color]}`}>
+                {children}
+            </button>
+        </div>
     );
 };
+
+interface Props {
+    /**
+     * 按钮大小
+     */
+    size?: "small" | "medium" | "large" | "xLarge";
+    /**
+     * 按钮颜色
+     */
+    color?: "primary" | "secondary" | "danger" | "common";
+    /**
+     * 按钮是否块级元素
+     */
+    block?: boolean;
+    /**
+     * 点击事件
+     */
+    onClick?: () => void;
+    /**
+     * 自定义样式
+     */
+    className?: string;
+    /**
+     * 按钮内容
+     */
+    children?: React.ReactNode;
+    /**
+     * 链接。当有链接时，按钮将渲染为a标签
+     */
+    href?: string;
+}

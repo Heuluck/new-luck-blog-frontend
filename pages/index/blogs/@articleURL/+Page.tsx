@@ -16,8 +16,8 @@ export default function Page(pageContext: PageContext) {
                 displayBack
             />
             <div className="flex p-8 bg-white flex-col rounded-lg group w-full border-dashed border border-gray-500">
-                <h1 className="font-bold md:text-3xl text-base text-orange-500">{articleData.title}</h1>
-                <div className="group-hover:w-full group-hover:bg-orange-500 h-0.5 mt-1 bg-gray-400 w-1/2 transition-all duration-200" />
+                <h1 className="font-bold md:text-3xl text-base text-main-500">{articleData.title}</h1>
+                <div className="group-hover:w-full group-hover:bg-main-500 h-0.5 mt-1 bg-gray-400 w-1/2 transition-all duration-200" />
                 <div className="flex flex-row mt-3">
                     <div className="text-xs text-gray-500">
                         {
@@ -28,7 +28,7 @@ export default function Page(pageContext: PageContext) {
                                         <a
                                             href={href}
                                             target="blank"
-                                            className="p-1 rounded-lg text-orange-500 transition-all hover:bg-slate-200">
+                                            className="p-1 rounded-lg text-main-500 transition-all hover:bg-slate-200">
                                             {children}
                                         </a>
                                     ),
@@ -51,7 +51,7 @@ export default function Page(pageContext: PageContext) {
                             h5: ({ children }) => <h5 className="text-base font-bold my-9">{children}</h5>,
                             p: ({ children }) => <p className="my-7 indent-8">{children}</p>,
                             a: ({ children, href }) => (
-                                <a target="blank" href={href} className="text-orange-500 hover:underline">
+                                <a target="blank" href={href} className="text-main-500 hover:underline">
                                     {children}
                                 </a>
                             ),

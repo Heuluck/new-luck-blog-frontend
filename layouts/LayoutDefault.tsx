@@ -15,7 +15,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                 {pageContext.urlPathname === "/" ? (
                     <div className="cursor-pointer select-none rounded-lg p-1 m-2 ml-4 px-3
                         mr-10 transition-all scale-105 hover:scale-110 active:scale-100 hover:bg-gray-100 flex flex-col">
-                        <span className="text-orange-600 font-bold text-xl">Heuluck的新博客</span>
+                        <span className="text-main-600 font-bold text-xl">Heuluck的新博客</span>
                         <span className="text-xs mt-0.5 block">—— 随便写的</span>
                     </div>
                 ) : (
@@ -23,17 +23,17 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
                         href="/"
                         className="cursor-pointer select-none rounded-lg p-1 m-2 ml-4 px-3
                         mr-10 transition-all scale-105 hover:scale-110 active:scale-100 hover:bg-gray-100 flex flex-col">
-                        <span className="text-orange-600 font-bold text-xl">Heuluck的新博客</span>
+                        <span className="text-main-600 font-bold text-xl">Heuluck的新博客</span>
                         <span className="text-xs mt-0.5 block">—— 随便写的</span>
                     </a>
                 )}
                 <TabLink href="/">首页</TabLink>
                 <TabLink href="/categories">标签</TabLink>
-                <TabLink href="/index2">测试</TabLink>
+                <TabLink href="/show">展示</TabLink>
                 <a
                     href="https://heuluck.top"
                     className="select-none hidden p-4 px-6 md:flex justify-center items-center text-base transition-all
-                    hover:text-gray-950 text-gray-600 hover:bg-orange-100 active:bg-orange-500 active:text-gray-100 font-bold">
+                    hover:text-gray-950 text-gray-600 hover:bg-main-100 active:bg-main-500 active:text-gray-100 font-bold">
                     老博客
                 </a>
                 <div className="ml-auto flex">
@@ -69,7 +69,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
 export function TopBar({ children, className }: { children: React.ReactNode; className?: string }) {
     return (
         <div className={`${className} sticky top-0 z-40 w-full backdrop-blur-sm border-b border-solid border-gray-300`}>
-            <div className="h-2 bg-orange-500/75 drop-shadow-2xl" />
+            <div className="h-2 bg-main-500/75 drop-shadow-2xl" />
             <div id="sidebar" className="sticky flex flex-row h-fit md:px-20 bg-white/60">
                 {children}
             </div>

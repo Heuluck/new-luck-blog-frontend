@@ -58,11 +58,7 @@ async function getByTitleURL(req: IReq, res: IRes) {
 
 async function getCategories(_: IReq, res: IRes) {
     try {
-        const { results } = await dQuery(
-            `
-SELECT * FROM blog_categories;`,
-            []
-        );
+        const { results } = await dQuery(`SELECT * FROM blog_categories;`, []);
         return results.constructor === Array && results.length >= 0
             ? res.status(HttpStatusCodes.OK).json({ code: 200, message: "查询成功", data: results })
             : res.status(HttpStatusCodes.NOT_FOUND).json({ code: 500, message: "查询失败" });
