@@ -1,8 +1,8 @@
+import React from "react";
 import { useData } from "vike-react/useData";
 import type { Data } from "./+data.js";
 import ArticleItem from "../../../components/Blog/Index/article.jsx";
-import { usePageContext } from "vike-react/usePageContext";
-import { DefaultBreadcrumb, SlateBgBreadcrumb } from "@components/button/breadcrumb.jsx";
+import { SlateBgBreadcrumb } from "@components/button/breadcrumb.jsx";
 
 export default function Page() {
     const category = useData<Data>();

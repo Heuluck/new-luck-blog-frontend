@@ -1,10 +1,10 @@
-import { deleteCookie } from "@utils/client/cookie";
+import React from "react";
 
 export default function Page() {
     return (
         <>
             <div>
-                123
+                <h1 className="text-xl">文章列表</h1>
             </div>
         </>
     );

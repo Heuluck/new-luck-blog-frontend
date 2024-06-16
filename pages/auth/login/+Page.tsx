@@ -1,12 +1,13 @@
-import { useState } from "react";
+import React from "react";
 import AuthForm from "../../../components/Form/authForm";
 import xiaoXuQiu from "/xiaoXuQiu.jpg";
 import axios, { AxiosError } from "axios";
-import { message } from "antd";
 import CryptoJS from "crypto-js";
-import "./animation.css";
 import { MessageInstance } from "antd/es/message/interface";
 import { Button } from "@components/button/button";
+import { message } from "antd";
+import { useState } from "react";
+import "./animation.css";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -37,7 +38,7 @@ export default function Login() {
         <div className="overflow-hidden w-screen h-screen flex items-center justify-center">
             {contextHolder}
             <div
-                className={`mb-32 md:mb-0 rounded-2xl w-10/12 md:w-8/12 shadow-2xl overflow-hidden normal-1
+                className={`md:mb-0 rounded-2xl w-10/12 md:w-8/12 shadow-2xl overflow-hidden normal-1
             flex flex-col ${toNextAnimeMiddle ? "md:flex-row-reverse" : "md:flex-row"} m-0 ${toNext !== 0 && (toNext === 2 ? "rotate-next" : "rotate-prev")}`}>
                 <img src={xiaoXuQiu} className="w-full h-56 md:h-auto object-cover object-bottom md:w-1/2" />
                 <div className="bg-white w-full p-8 px-0 max-h-[90vh] overflow-y-auto">
@@ -66,7 +67,7 @@ export default function Login() {
                                     description="请输入邮箱"></AuthForm.Item>
                             </>
                         )}
-                        <div className="my-4 flex flex-col w-9/12">
+                        <div className="my-4 flex flex-col w-9/12 gap-3">
                             <Button
                                 block
                                 size="large"
@@ -160,7 +161,8 @@ const submitHandler = async (
             username.trim().length < 4 ||
             password.trim().length < 8 ||
             confirmPassword.trim().length < 8 ||
-            confirmPassword !== password
+            confirmPassword !== password || 
+            email.trim().length < 8
         ) {
             messageApi.open({
                 type: "warning",

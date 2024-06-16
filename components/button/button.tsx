@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 export const Button: FC<Props> = ({
     size = "medium",
@@ -28,8 +28,8 @@ export const Button: FC<Props> = ({
     };
     const colorStyle = {
         primary: "bg-main-400 hover:bg-main-300 active:bg-main-500 text-white",
-        secondary: "bg-secondary-500 hover:bg-secondary-400 active:bg-secondary-600 text-white",
-        common: "bg-white hover:bg-gray-200 hover:border-main-400 active:bg-gray-300 text-black border-gray-300 border-solid border",
+        secondary: "bg-secondary-400 hover:bg-secondary-300 active:bg-secondary-500 text-white",
+        common: "bg-white hover:bg-gray-200 active:bg-gray-300 hover:border-main-400 text-black border-gray-300 border-solid border",
         danger: "bg-red-500 hover:bg-red-400 active:bg-red-600 text-white",
     };
     const activeColorStyle = {

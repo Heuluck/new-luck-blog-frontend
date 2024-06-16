@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FieldPacket, QueryError, QueryResult } from "mysql2";
 import pool from "./database";
 import { SQLError } from "@server/common/Errors";

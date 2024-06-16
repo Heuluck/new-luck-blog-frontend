@@ -8,7 +8,7 @@ export async function vikeHandler<Context extends Record<string | number | symbo
     const pageContextInit = {
         ...(context ?? {}),
         urlOriginal: request.url,
-        //@ts-ignore
+        /** @ts-expect-error 真的包含user我不骗你 */
         user: rawRequest.user,
     };
     const pageContext = await renderPage(pageContextInit);

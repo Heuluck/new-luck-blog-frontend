@@ -14,6 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </a>
                 <TabLink href="/dashboard">首页</TabLink>
                 <TabLink href="/dashboard/Articles">文章列表</TabLink>
+                <TabLink href="/dashboard/Articles/new">新建文章</TabLink>
                 <TabLink onClick={()=>logout("/")}>退出登录 </TabLink>
             </LeftBar>
             <Content>{children}</Content>
@@ -29,7 +30,7 @@ function Content({ children }: { children: React.ReactNode }) {
     return (
         <div id="page-container" className=" w-full flex justify-center items-center page-transition-finish">
             <div id="page-content" className="p-5 h-screen pb-12 w-full flex justify-center items-center">
-                <div className="w-full h-full m-5 bg-gray-100 rounded-xl overflow-y-auto p-8">{children}</div>
+                <div className="w-full h-full m-5 bg-gray-100 rounded-xl overflow-y-auto p-8 relative">{children}</div>
             </div>
         </div>
     );

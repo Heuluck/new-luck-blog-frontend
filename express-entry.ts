@@ -3,12 +3,10 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import BaseRouter from "@server/routes";
-import dotenv from "dotenv";
 import { vikeHandler } from "./server/vike-handler";
 import { createMiddleware } from "@universal-middleware/express";
 import express from "express";
 import Paths from "@server/common/Paths";
-import { renderPage } from "vike/server";
 import cookieParser from "cookie-parser";
 import auth from "./server/services/authProvider";
 

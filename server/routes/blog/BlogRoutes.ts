@@ -1,8 +1,9 @@
 import HttpStatusCodes from "@server/common/HttpStatusCodes";
 
 import { IReq, IRes } from "../types/express/misc";
-import dbQuery, { dQuery } from "@server/database/connection";
+import dbQuery, { dQuery, InsertResult } from "@server/database/connection";
 import { SQLError } from "@server/common/Errors";
+import { validationResult } from "express-validator";
 
 async function getAll(_: IReq, res: IRes) {
     dbQuery(
@@ -128,7 +129,7 @@ ORDER BY art.lastUpdate DESC;`,
                       categoryDescription: (name.results[0] as { description: string }).description,
                   },
               })
-            : res.status(HttpStatusCodes.OK).json({ code: 404, message: "查询成功，但没有该分类", data: null });
+            : res.status(HttpStatusCodes.NOT_FOUND).json({ code: 404, message: "查询成功，但没有该分类", data: null });
     } catch (e) {
         console.log(e);
         if (e instanceof SQLError)
@@ -139,6 +140,38 @@ ORDER BY art.lastUpdate DESC;`,
     }
 }
 
+async function newArticle(
+    req: IReq<{ username: string; title: string; content: string; titleURL: string }>,
+    res: IRes
+) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "参数错误", data: result.array() });
+    } else
+        try {
+            const { username, title, content, titleURL } = req.body;
+            const { results } = await dQuery(
+                `INSERT INTO articles (username, lastUpdate, title, content, titleURL) SELECT ?, ?, ?, ?, ? 
+            WHERE NOT EXISTS(SELECT titleURL FROM articles WHERE titleURL = ?);`,
+                [username, new Date(), title, content, titleURL, titleURL]
+            );
+            const insertResult: InsertResult = results as InsertResult;
+            if (insertResult.affectedRows === 1)
+                return res.status(HttpStatusCodes.CREATED).json({ code: 201, message: "发布成功" });
+            else return res.status(HttpStatusCodes.CONFLICT).json({ code: 409, message: "发布失败，URL重复" });
+        } catch (e) {
+            console.log(e);
+            if (e instanceof SQLError)
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
+            else
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[UNKNOWN ERROR]" });
+        }
+}
+
 export default {
     getAll,
     getById,
@@ -146,4 +179,5 @@ export default {
     getCategories,
     getCategoryByTitleURL,
     getCategoryByCategoryTitleURL,
+    newArticle,
 } as const;

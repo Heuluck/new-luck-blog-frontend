@@ -4,10 +4,9 @@ import type { Data } from "./+data.js";
 import Markdown from "react-markdown";
 import dayjs from "dayjs";
 import { CategoryButton } from "@components/button/category.jsx";
-import { DefaultBreadcrumb, SlateBgBreadcrumb } from "./../../../../components/button/breadcrumb";
-import { PageContext } from "vike/types";
+import { SlateBgBreadcrumb } from "./../../../../components/button/breadcrumb";
 
-export default function Page(pageContext: PageContext) {
+export default function Page() {
     const articleData = useData<Data>();
     return (
         <div className="flex flex-col w-full">
@@ -55,6 +54,7 @@ export default function Page(pageContext: PageContext) {
                                     {children}
                                 </a>
                             ),
+                            code: ({ children }) => <code className="bg-gray-200 px-4 py-6 rounded-md inline-block">{children}</code>,
                         }}>
                         {articleData.content}
                     </Markdown>

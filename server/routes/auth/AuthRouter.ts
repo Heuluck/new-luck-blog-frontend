@@ -1,48 +1,27 @@
 import { Router } from "express";
-// import jetValidator from "jet-validator";
 import Paths from "../../common/Paths";
 import AuthRoutes from "./AuthRoutes";
-
-// **** Variables **** //
-
-// const validate = jetValidator();
-
-// ** Add UserRouter ** //
+import { body } from "express-validator";
 
 const authRouter = Router();
 
 authRouter.post(
     Paths.Auth.Login,
-    // validate(["name", "string", "body"], ["password", "string", "body"]),
+    body("name").trim().isString().isLength({min:4}).notEmpty(),
+    body("password").trim().isString().isLength({min:8}).notEmpty(),
     AuthRoutes.Login
 );
 
 authRouter.post(
     Paths.Auth.Register,
-    // validate(["name", "string", "body"], ["password", "string", "body"], ["email", "string", "body"]),
+    body("name").trim().isString().isLength({min:4}).notEmpty(),
+    body("password").trim().isString().isLength({min:8}).notEmpty(),
+    body("email").trim().isEmail().notEmpty(),
     AuthRoutes.Register
 );
 
 authRouter.get(Paths.Auth.Logout, AuthRoutes.Logout);
 
-authRouter.post(Paths.Auth.OAuth.Github, AuthRoutes.OAuthGithub);
-
-// authRouter.post(
-//     Paths.Auth.OAuth.Apple,
-//     // validate(["code", "string", "body"]),
-//     (_, res: IRes) => {
-//         dbQuery(
-//             "INSERT INTO users (id, name, type, email, created_at, avatar, github_id) SELECT NULL, 'heuluck', 'reader', 'foxmail', '2024-06-10 16:56:35', 's', 'd' WHERE NOT EXISTS(SELECT name FROM users WHERE name = 'heuluck')",
-//             [],
-//             (results, fields) => {
-//                 return res.status(200).json({ code: 200, message: "注册成功", results,fields });
-//             },
-//             (err) => {
-//                 return res.status(400).json({ code: 200, message: "注册成功", err });
-//                 console.log(err);
-//             }
-//         );
-//     }
-// );
+authRouter.post(Paths.Auth.OAuth.Github, body("code").trim().isString().notEmpty(), AuthRoutes.OAuthGithub);
 
 export default authRouter;

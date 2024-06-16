@@ -1,4 +1,5 @@
 import HttpStatusCodes from "@server/common/HttpStatusCodes";
+import { validationResult } from "express-validator";
 import CryptoJS from "crypto-js";
 import axios from "axios";
 import dbQuery, { InsertResult } from "@server/database/connection";
@@ -10,61 +11,67 @@ import { SQLError, UserError } from "@server/common/Errors";
 
 // **** Functions **** //
 async function Login(req: IReq<{ name: string; password: string }>, res: IRes) {
-    const { name, password } = req.body;
-    const SHA3Password = CryptoJS.SHA3(password, { outputLength: 256 }).toString().toUpperCase();
-    await dbQuery(
-        "SELECT * FROM users where name = ? and password = ? LIMIT 1;",
-        [name, SHA3Password],
-        (results) => {
-            if (results.constructor === Array && results.length === 1) {
-                const user: User = results[0] as User;
-                signJWT(
-                    { id: user.id, name: user.name, email: user.email, type: user.type, avatar: user.avatar },
-                    "1d"
-                ).then(
-                    (token) => {
-                        res.cookie("token", token, {
-                            maxAge: 24 * 60 * 60 * 1000, // 一天
-                            httpOnly: true,
-                        });
-                        return res.status(HttpStatusCodes.OK).json({
-                            code: 200,
-                            message: "登录成功",
-                            data: {
-                                id: user.id,
-                                name: user.name,
-                                email: user.email,
-                                type: user.type,
-                                avatar: user.avatar,
-                            },
-                        });
-                    },
-                    (err) => {
-                        console.log(err);
-                        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
-                            code: 500,
-                            message: "[JWT ERROR] - Please check the logs",
-                        });
-                    }
-                );
-            } else {
-                return res.status(HttpStatusCodes.UNAUTHORIZED).json({ code: 401, message: "用户名或密码错误" });
+    const result = validationResult(req);
+    if (result.isEmpty()) {
+        const { name, password } = req.body;
+        const SHA3Password = CryptoJS.SHA3(password, { outputLength: 256 }).toString().toUpperCase();
+        await dbQuery(
+            "SELECT * FROM users where name = ? and password = ? LIMIT 1;",
+            [name, SHA3Password],
+            (results) => {
+                if (results.constructor === Array && results.length === 1) {
+                    const user: User = results[0] as User;
+                    signJWT(
+                        { id: user.id, name: user.name, email: user.email, type: user.type, avatar: user.avatar },
+                        "1d"
+                    ).then(
+                        (token) => {
+                            res.cookie("token", token, {
+                                maxAge: 24 * 60 * 60 * 1000, // 一天
+                                httpOnly: true,
+                            });
+                            return res.status(HttpStatusCodes.OK).json({
+                                code: 200,
+                                message: "登录成功",
+                                data: {
+                                    id: user.id,
+                                    name: user.name,
+                                    email: user.email,
+                                    type: user.type,
+                                    avatar: user.avatar,
+                                },
+                            });
+                        },
+                        (err) => {
+                            console.log(err);
+                            return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
+                                code: 500,
+                                message: "[JWT ERROR] - Please check the logs",
+                            });
+                        }
+                    );
+                } else {
+                    return res.status(HttpStatusCodes.UNAUTHORIZED).json({ code: 401, message: "用户名或密码错误" });
+                }
+            },
+            (err) => {
+                console.log(err.message);
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
             }
-        },
-        (err) => {
-            console.log(err.message);
-            return res
-                .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
-                .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
-        }
-    );
+        );
+    } else {
+        return res
+            .status(HttpStatusCodes.BAD_REQUEST)
+            .json({ code: 400, message: "信息缺失或无效", errors: result.array() });
+    }
 }
 
 async function Register(req: IReq<{ name: string; password: string; email: string }>, res: IRes) {
-    const { name, password, email } = req.body;
-    if (name.trim() === "" || password.trim() === "" || email.trim() === "")
-        return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "用户名、密码、邮箱不能为空" });
-    else {
+    const result = validationResult(req);
+    if (result.isEmpty()) {
+        const { name, password, email } = req.body;
         const SHA3Password = CryptoJS.SHA3(password, { outputLength: 256 }).toString().toUpperCase();
         await dbQuery(
             `INSERT INTO users (id, name, password, type, email, created_at) SELECT NULL, ?, ?, ?, ?, ? WHERE NOT EXISTS(SELECT name FROM users WHERE name = ?);`,
@@ -141,6 +148,10 @@ async function Register(req: IReq<{ name: string; password: string; email: strin
                     .json({ code: 500, message: "[DATABASE ERROR - Fatal] - Please check the logs" });
             }
         );
+    } else {
+        return res
+            .status(HttpStatusCodes.BAD_REQUEST)
+            .json({ code: 400, message: "信息缺失或无效", errors: result.array() });
     }
 }
 
@@ -150,140 +161,147 @@ async function Logout(_: IReq, res: IRes) {
 }
 
 async function OAuthGithub(req: IReq<{ code: string }>, res: IRes) {
-    const { code } = req.body;
-    if (!code) return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "code不能为空" });
-    try {
-        const accessRes = await axios.post(
-            "https://github.com/login/oauth/access_token",
-            {
-                client_id: process.env.GITHUB_CLIENT_ID,
-                client_secret: process.env.GITHUB_CLIENT_SECRET,
-                code,
-            },
-            {
-                headers: {
-                    Accept: "application/json",
+    const result = validationResult(req);
+
+    if (result.isEmpty()) {
+        const { code } = req.body;
+        try {
+            const accessRes = await axios.post(
+                "https://github.com/login/oauth/access_token",
+                {
+                    client_id: process.env.GITHUB_CLIENT_ID,
+                    client_secret: process.env.GITHUB_CLIENT_SECRET,
+                    code,
                 },
-            }
-        );
-        if (accessRes.data.error)
-            //Github返回错误
-            return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: accessRes.data.error });
-        else if (accessRes.data.access_token && accessRes.data.scope.indexOf("email") != -1) {
-            const userInfoRes = await axios.get("https://api.github.com/user", {
-                headers: {
-                    Authorization: `token ${accessRes.data.access_token}`,
-                    Accept: "application/json",
-                },
-            });
-            try {
-                const userData = await OAuth.findUser(userInfoRes.data.id, "github");
-                if (userData)
-                    signJWT(
-                        {
-                            id: userData.id,
-                            name: userData.name,
-                            email: userData.email,
-                            type: userData.type,
-                            avatar: userData.avatar,
-                        },
-                        "1d"
-                    ).then(
-                        (token) => {
-                            res.cookie("token", token, {
-                                maxAge: 24 * 60 * 60 * 1000, // 一天
-                                httpOnly: true,
-                            });
-                            return res.status(HttpStatusCodes.OK).json({
-                                code: 200,
-                                message: "登录成功",
-                                data: {
-                                    id: userData.id,
-                                    name: userData.name,
-                                    email: userData.email,
-                                    type: userData.type,
-                                    avatar: userData.avatar,
-                                },
-                            });
-                        },
-                        (err) => {
-                            console.log(err);
-                            return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
-                                code: 500,
-                                message: "[JWT ERROR] - Please check the logs",
-                            });
-                        }
-                    );
-            } catch (err) {
-                if (err instanceof UserError && err.code == 2)
-                    try {
-                        const userData = await OAuth.createUser(
+                {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                }
+            );
+            if (accessRes.data.error)
+                //Github返回错误
+                return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: accessRes.data.error });
+            else if (accessRes.data.access_token && accessRes.data.scope.indexOf("email") != -1) {
+                const userInfoRes = await axios.get("https://api.github.com/user", {
+                    headers: {
+                        Authorization: `token ${accessRes.data.access_token}`,
+                        Accept: "application/json",
+                    },
+                });
+                try {
+                    const userData = await OAuth.findUser(userInfoRes.data.id, "github");
+                    if (userData)
+                        signJWT(
                             {
-                                name: userInfoRes.data.login,
-                                email: userInfoRes.data.email,
-                                avatar: userInfoRes.data.avatar_url,
-                                github_id: userInfoRes.data.id,
+                                id: userData.id,
+                                name: userData.name,
+                                email: userData.email,
+                                type: userData.type,
+                                avatar: userData.avatar,
                             },
-                            "github"
+                            "1d"
+                        ).then(
+                            (token) => {
+                                res.cookie("token", token, {
+                                    maxAge: 24 * 60 * 60 * 1000, // 一天
+                                    httpOnly: true,
+                                });
+                                return res.status(HttpStatusCodes.OK).json({
+                                    code: 200,
+                                    message: "登录成功",
+                                    data: {
+                                        id: userData.id,
+                                        name: userData.name,
+                                        email: userData.email,
+                                        type: userData.type,
+                                        avatar: userData.avatar,
+                                    },
+                                });
+                            },
+                            (err) => {
+                                console.log(err);
+                                return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
+                                    code: 500,
+                                    message: "[JWT ERROR] - Please check the logs",
+                                });
+                            }
                         );
-                        if (userData)
-                            signJWT(
+                } catch (err) {
+                    if (err instanceof UserError && err.code == 2)
+                        try {
+                            const userData = await OAuth.createUser(
                                 {
-                                    id: userData.id,
-                                    name: userData.name,
-                                    email: userData.email,
-                                    type: userData.type,
-                                    avatar: userData.avatar,
+                                    name: userInfoRes.data.login,
+                                    email: userInfoRes.data.email,
+                                    avatar: userInfoRes.data.avatar_url,
+                                    github_id: userInfoRes.data.id,
                                 },
-                                "1d"
-                            ).then(
-                                (token) => {
-                                    res.cookie("token", token, {
-                                        maxAge: 24 * 60 * 60 * 1000, // 一天
-                                        httpOnly: true,
-                                    });
-                                    return res.status(HttpStatusCodes.OK).json({
-                                        code: 200,
-                                        message: userData.msg,
-                                        data: {
-                                            id: userData.id,
-                                            name: userData.name,
-                                            email: userData.email,
-                                            type: userData.type,
-                                            avatar: userData.avatar,
-                                        },
-                                    });
-                                },
-                                (err) => {
-                                    console.log(err);
-                                    return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
-                                        code: 500,
-                                        message: "[JWT ERROR] - Please check the logs",
-                                    });
-                                }
+                                "github"
                             );
-                    } catch (err) {
-                        if (err instanceof UserError)
-                            return res
-                                .status(HttpStatusCodes.BAD_REQUEST)
-                                .json({ code: 400, message: err.message, errCode: err.code });
-                        else if (err instanceof SQLError)
-                            return res
-                                .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
-                                .json({ code: 500, message: err.message });
-                        else
-                            return res
-                                .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
-                                .json({ code: 500, message: "FATAL ERROR" });
-                    }
+                            if (userData)
+                                signJWT(
+                                    {
+                                        id: userData.id,
+                                        name: userData.name,
+                                        email: userData.email,
+                                        type: userData.type,
+                                        avatar: userData.avatar,
+                                    },
+                                    "1d"
+                                ).then(
+                                    (token) => {
+                                        res.cookie("token", token, {
+                                            maxAge: 24 * 60 * 60 * 1000, // 一天
+                                            httpOnly: true,
+                                        });
+                                        return res.status(HttpStatusCodes.OK).json({
+                                            code: 200,
+                                            message: userData.msg,
+                                            data: {
+                                                id: userData.id,
+                                                name: userData.name,
+                                                email: userData.email,
+                                                type: userData.type,
+                                                avatar: userData.avatar,
+                                            },
+                                        });
+                                    },
+                                    (err) => {
+                                        console.log(err);
+                                        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
+                                            code: 500,
+                                            message: "[JWT ERROR] - Please check the logs",
+                                        });
+                                    }
+                                );
+                        } catch (err) {
+                            if (err instanceof UserError)
+                                return res
+                                    .status(HttpStatusCodes.BAD_REQUEST)
+                                    .json({ code: 400, message: err.message, errCode: err.code });
+                            else if (err instanceof SQLError)
+                                return res
+                                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                                    .json({ code: 500, message: err.message });
+                            else
+                                return res
+                                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                                    .json({ code: 500, message: "FATAL ERROR" });
+                        }
+                }
+            } else {
+                return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "Invalid request" });
             }
-        } else {
-            return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "Invalid request" });
+        } catch (err) {
+            if (axios.isAxiosError(err))
+                return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: err.message });
+            else return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: "FATAL ERROR" });
         }
-    } catch (err) {
-        if (axios.isAxiosError(err))
-            return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: err.message });
-        else return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ code: 500, message: "FATAL ERROR" });
+    } else {
+        return res
+            .status(HttpStatusCodes.BAD_REQUEST)
+            .json({ code: 400, message: "信息缺失或无效", errors: result.array() });
     }
 }
 

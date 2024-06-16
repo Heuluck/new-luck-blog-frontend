@@ -1,12 +1,7 @@
 import { Router } from "express";
-import jetValidator from "jet-validator";
 import Paths from "../../common/Paths";
-import User from "@server/models/User";
 import UserRoutes from "./BlogRoutes";
-
-// **** Variables **** //
-
-// const validate = jetValidator();
+import { body } from "express-validator";
 
 const blogRouter = Router();
 
@@ -18,6 +13,22 @@ blogRouter.get(Paths.Blog.GetById, UserRoutes.getById);
 
 // blog/article/:titleURL
 blogRouter.get(Paths.Blog.GetByTitleURL, UserRoutes.getByTitleURL);
+
+blogRouter.post(
+    Paths.Blog.RESTful,
+    body("username").trim().isString().notEmpty(),
+    body("title").trim().isString().notEmpty(),
+    body("content").trim().isString().notEmpty(),
+    body("titleURL")
+        .trim()
+        .isString()
+        .isLength({ max: 20 })
+        .notEmpty()
+        .not()
+        .matches(/[^a-zA-Z0-9]/, "i")
+        .withMessage("不能包含特殊符号"),
+    UserRoutes.newArticle
+);
 
 blogRouter.get(Paths.Blog.GetCategories, UserRoutes.getCategories);
 
