@@ -5,6 +5,9 @@ export const Button: FC<Props> = ({
     color = "common",
     block,
     onClick,
+    onMouseEnter,
+    onMouseLeave,
+    onFocus,
     href,
     className,
     children,
@@ -44,6 +47,13 @@ export const Button: FC<Props> = ({
         <div className={blockStyle}>
             <a
                 href={href}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onFocus={onFocus}
+                onClick={(e) => {
+                    setIsActive(true);
+                    onClick && onClick(e);
+                }}
                 className={`${basicStyle} ${sizeStyle[size]} ${colorStyle[color]} ${blockStyle} ${className} ${isActive && activeColorStyle[color]}`}>
                 {children}
             </a>
@@ -52,9 +62,12 @@ export const Button: FC<Props> = ({
         <div className={blockStyle}>
             <button
                 type="button"
-                onClick={() => {
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onFocus={onFocus}
+                onClick={(e) => {
                     setIsActive(true);
-                    onClick && onClick();
+                    onClick && onClick(e);
                 }}
                 className={`${basicStyle} ${sizeStyle[size]} ${colorStyle[color]} ${blockStyle} ${className} ${isActive && activeColorStyle[color]}`}>
                 {children}
@@ -79,7 +92,19 @@ interface Props {
     /**
      * 点击事件
      */
-    onClick?: () => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
+    /**
+     * 鼠标移入事件
+     */
+    onMouseEnter?: () => void;
+    /**
+     * 鼠标移出事件
+     */
+    onMouseLeave?: () => void;
+    /**
+     * 聚焦事件
+     */
+    onFocus?: () => void;
     /**
      * 自定义样式
      */

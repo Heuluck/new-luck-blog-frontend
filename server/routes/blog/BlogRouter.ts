@@ -1,7 +1,8 @@
 import { Router } from "express";
 import Paths from "../../common/Paths";
 import UserRoutes from "./BlogRoutes";
-import { body } from "express-validator";
+import { body, query } from "express-validator";
+import Verify from "@server/middlewares/Verify";
 
 const blogRouter = Router();
 
@@ -25,9 +26,24 @@ blogRouter.post(
         .isLength({ max: 20 })
         .notEmpty()
         .not()
-        .matches(/[^a-zA-Z0-9]/, "i")
+        .matches(/[^a-zA-Z0-9-_]/, "i")
         .withMessage("不能包含特殊符号"),
+    Verify.verifyMinJWTFromHttpOnlyMiddleware,
     UserRoutes.newArticle
+);
+
+blogRouter.delete(
+    Paths.Blog.RESTful,
+    query("id").trim().notEmpty(),
+    query("titleURL")
+        .trim()
+        .isLength({ max: 20 })
+        .notEmpty()
+        .not()
+        .matches(/[^a-zA-Z0-9-_]/, "i")
+        .withMessage("不能包含特殊符号"),
+    Verify.verifyMinJWTFromHttpOnlyMiddleware,
+    UserRoutes.deleteArticle
 );
 
 blogRouter.get(Paths.Blog.GetCategories, UserRoutes.getCategories);

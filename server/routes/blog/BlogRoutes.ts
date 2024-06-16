@@ -172,6 +172,31 @@ async function newArticle(
         }
 }
 
+async function deleteArticle(req: IReq<{ id: number; titleURL: string }>, res: IRes) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "参数错误", data: result.array() });
+    } else
+        try {
+            const { id, titleURL } = req.query;
+            const { results } = await dQuery(`DELETE FROM articles WHERE id = ? AND titleURL = ?`, [id, titleURL]);
+            const insertResult = results as InsertResult;
+            if (insertResult.affectedRows > 0)
+                return res.status(HttpStatusCodes.OK).json({ code: 201, message: `成功删除${insertResult.affectedRows}个文章` });
+            else return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "删除失败，文章不存在" });
+        } catch (e) {
+            console.log(e);
+            if (e instanceof SQLError)
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
+            else
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[UNKNOWN ERROR]" });
+        }
+}
+
 export default {
     getAll,
     getById,
@@ -180,4 +205,5 @@ export default {
     getCategoryByTitleURL,
     getCategoryByCategoryTitleURL,
     newArticle,
+    deleteArticle
 } as const;
