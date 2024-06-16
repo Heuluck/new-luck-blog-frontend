@@ -3,18 +3,27 @@ import axios from "axios";
 import { usePageContext } from "vike-react/usePageContext";
 import { message } from "antd";
 import { Editor } from "@components/Dashboard/Editor";
+import { Data } from "./+data";
+import { useData } from "vike-react/useData";
 
 export default function Page() {
+    const blog = useData<Data>();
     const PageContext = usePageContext();
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [titleURL, setTitleURL] = useState(crypto.randomUUID().slice(0, 8));
-    const [writer, setWriter] = useState(PageContext.user?.name ?? "");
+    const [title, setTitle] = useState(blog?.title ?? "该文章不存在");
+    const [content, setContent] = useState(blog?.content ?? "");
+    const [titleURL, setTitleURL] = useState(blog?.titleURL ?? "");
+    const [writer, setWriter] = useState(blog?.username ?? PageContext.user?.name ?? "");
     const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
         window.onbeforeunload = () => {
-            if (title.trim().length >= 1 || content.trim().length >= 1) return "你确定要离开吗？";
+            if (
+                (title !== (blog?.title ?? "该文章不存在")) ||
+                (content !== (blog?.content ?? "")) ||
+                (writer !== (blog?.username ?? PageContext.user?.name ?? "")) ||
+                (titleURL !== (blog?.titleURL ?? ""))
+            )
+                return "你确定要离开吗？";
         };
     }, [title, content]);
 
@@ -26,7 +35,8 @@ export default function Page() {
             titleURL.trim().length >= 1
         )
             try {
-                const res = await axios.post(import.meta.env.PUBLIC_ENV__BASE_URL + "/blog/", {
+                const res = await axios.put(import.meta.env.PUBLIC_ENV__BASE_URL + "/blog/", {
+                    id: blog?.id,
                     title,
                     content,
                     titleURL,
@@ -51,6 +61,7 @@ export default function Page() {
         <>
             {contextHolder}
             <Editor
+                disabled={!blog}
                 pageTitle="新建文章"
                 title={title}
                 content={content}
@@ -60,7 +71,7 @@ export default function Page() {
                 setContent={setContent}
                 setWriter={setWriter}
                 setTitleURL={setTitleURL}
-                onSave={()=>messageApi.info("还没实现")}
+                onSave={() => messageApi.info("还没实现")}
                 onPublish={submit}
             />
         </>

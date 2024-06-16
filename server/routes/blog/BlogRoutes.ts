@@ -172,6 +172,38 @@ async function newArticle(
         }
 }
 
+async function putArticle(
+    req: IReq<{ id: number; username: string; title: string; content: string; titleURL: string }>,
+    res: IRes
+) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "参数错误", data: result.array() });
+    } else
+        try {
+            const { id, username, title, content, titleURL } = req.body;
+            const { results } = await dQuery(
+                `UPDATE articles SET username = ?, lastUpdate = ?, title = ?, content = ?, titleURL = ?
+                WHERE id = ? AND NOT EXISTS(SELECT T.titleURL FROM( SELECT titleURL FROM articles WHERE titleURL = ? AND id != ?)T);`,
+                [username, new Date(), title, content, titleURL, id, titleURL, id]
+            );
+            const insertResult: InsertResult = results as InsertResult;
+            if (insertResult.affectedRows === 1)
+                return res.status(HttpStatusCodes.CREATED).json({ code: 201, message: "更新成功" });
+            else return res.status(HttpStatusCodes.CONFLICT).json({ code: 409, message: "更新失败，URL重复" });
+        } catch (e) {
+            console.log(e);
+            if (e instanceof SQLError)
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[DATABASE ERROR] - Please check the logs" });
+            else
+                return res
+                    .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({ code: 500, message: "[UNKNOWN ERROR]" });
+        }
+}
+
 async function deleteArticle(req: IReq<{ id: number; titleURL: string }>, res: IRes) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -182,7 +214,9 @@ async function deleteArticle(req: IReq<{ id: number; titleURL: string }>, res: I
             const { results } = await dQuery(`DELETE FROM articles WHERE id = ? AND titleURL = ?`, [id, titleURL]);
             const insertResult = results as InsertResult;
             if (insertResult.affectedRows > 0)
-                return res.status(HttpStatusCodes.OK).json({ code: 201, message: `成功删除${insertResult.affectedRows}个文章` });
+                return res
+                    .status(HttpStatusCodes.OK)
+                    .json({ code: 201, message: `成功删除${insertResult.affectedRows}个文章` });
             else return res.status(HttpStatusCodes.BAD_REQUEST).json({ code: 400, message: "删除失败，文章不存在" });
         } catch (e) {
             console.log(e);
@@ -205,5 +239,6 @@ export default {
     getCategoryByTitleURL,
     getCategoryByCategoryTitleURL,
     newArticle,
-    deleteArticle
+    putArticle,
+    deleteArticle,
 } as const;

@@ -39,24 +39,25 @@ export const Item: FC<props> = ({ items }) => {
                     {items.username}
                 </Markdown>
             </td>
-            <td className="text-center text-xs">
-                <Markdown
-                    components={{
-                        a: ({ children }) => <span>{children}</span>,
-                    }}>
-                    {items.content.slice(0, 20)}
-                </Markdown>
-            </td>
+            <td className="text-center text-xs">{items.content.slice(0, 20)}</td>
             <td className="text-center text-xs">{dayjs(items.lastUpdate).format("YYYY/MM/DD HH:MM")}</td>
             <td className="text-center text-xs">{items.titleURL}</td>
-            <td className="text-center">
+            <td className="text-center flex flex-row gap-2 justify-center items-center">
+                <Button
+                    color="primary"
+                    size="small"
+                    onClick={() => (window.location.href = `/dashboard/Articles/edit/${items.titleURL}`)}>
+                    修改
+                </Button>
                 <Popconfirm
                     title="确认删除"
                     onConfirm={confirmDelete}
                     okText="确认"
                     cancelText="取消"
                     okButtonProps={{ danger: true }}>
-                    <Button color="danger" size="small">删除</Button>
+                    <Button color="danger" size="small">
+                        删除
+                    </Button>
                 </Popconfirm>
             </td>
         </tr>

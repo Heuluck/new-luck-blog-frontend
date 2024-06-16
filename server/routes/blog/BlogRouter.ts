@@ -32,6 +32,24 @@ blogRouter.post(
     UserRoutes.newArticle
 );
 
+blogRouter.put(
+    Paths.Blog.RESTful,
+    body("id").isInt().notEmpty(),
+    body("username").trim().isString().notEmpty(),
+    body("title").trim().isString().notEmpty(),
+    body("content").trim().isString().notEmpty(),
+    body("titleURL")
+        .trim()
+        .isString()
+        .isLength({ max: 20 })
+        .notEmpty()
+        .not()
+        .matches(/[^a-zA-Z0-9-_]/, "i")
+        .withMessage("不能包含特殊符号"),
+    // Verify.verifyMinJWTFromHttpOnlyMiddleware,
+    UserRoutes.putArticle
+);
+
 blogRouter.delete(
     Paths.Blog.RESTful,
     query("id").trim().notEmpty(),
