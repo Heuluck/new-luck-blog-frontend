@@ -46,7 +46,7 @@ blogRouter.put(
         .not()
         .matches(/[^a-zA-Z0-9-_]/, "i")
         .withMessage("不能包含特殊符号"),
-    // Verify.verifyMinJWTFromHttpOnlyMiddleware,
+     Verify.verifyMinJWTFromHttpOnlyMiddleware,
     UserRoutes.putArticle
 );
 
