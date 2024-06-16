@@ -11,7 +11,6 @@ export default {
   title: "Heuluck的新博客",
   extends: vikeReact,
   passToClient: [
-    'headers',
     'user'
   ]
 } satisfies Config;

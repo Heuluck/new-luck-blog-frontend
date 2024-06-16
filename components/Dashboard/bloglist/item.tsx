@@ -56,7 +56,7 @@ export const Item: FC<props> = ({ items }) => {
                     okText="确认"
                     cancelText="取消"
                     okButtonProps={{ danger: true }}>
-                    <Button color="danger">删除</Button>
+                    <Button color="danger" size="small">删除</Button>
                 </Popconfirm>
             </td>
         </tr>

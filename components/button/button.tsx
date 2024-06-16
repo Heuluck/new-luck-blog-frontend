@@ -24,7 +24,8 @@ export const Button: FC<Props> = ({
 
     const basicStyle = "inline-block flex-grow-0 flex-shrink-0 transition-all cursor-pointer rounded-lg";
     const sizeStyle = {
-        small: "text-sm p-0.5 px-2",
+        xSmall: "text-sm p-0.5 px-2",
+        small: "text-sm p-1 px-2.5",
         medium: "text-base p-1 px-[15px]",
         large: "text-base p-2 px-5",
         xLarge: "text-lg p-4 px-7",
@@ -80,7 +81,7 @@ interface Props {
     /**
      * 按钮大小
      */
-    size?: "small" | "medium" | "large" | "xLarge";
+    size?: "xSmall" | "small" | "medium" | "large" | "xLarge";
     /**
      * 按钮颜色
      */
