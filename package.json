@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx ./express-entry.ts",
     "build": "vite build",
-    "preview": "NODE_ENV=production tsx ./express-entry.ts",
+    "preview": "set NODE_ENV=production && tsx ./express-entry.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "keywords": [],

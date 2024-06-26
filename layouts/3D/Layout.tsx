@@ -1,18 +1,18 @@
-import "./style.css";
-
-import "./tailwind.css";
 import React from "react";
-import { TabLink } from "../components/TabLink";
+import { TabLink } from "./TabLink";
 import { usePageContext } from "vike-react/usePageContext";
 import { logout } from "@utils/client/requests/main";
+import "../tailwind.css";
+import "./style.css";
 
-export default function LayoutDefault({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     const pageContext = usePageContext();
     return (
         <div className="min-h-screen bg-gray-100">
             <TopBar>
                 {pageContext.urlPathname === "/" ? (
-                    <div className="cursor-pointer select-none rounded-lg p-1 m-2 ml-4 px-3
+                    <div
+                        className="cursor-pointer select-none rounded-lg p-1 m-2 ml-4 px-3
                         mr-10 transition-all scale-105 hover:scale-110 active:scale-100 hover:bg-gray-100 flex flex-col">
                         <span className="text-main-600 font-bold text-xl">Heuluck的新博客</span>
                         <span className="text-xs mt-0.5 block">—— 随便写的</span>
@@ -65,22 +65,26 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
     );
 }
 
-export function TopBar({ children, className }: { children: React.ReactNode; className?: string }) {
+export function TopBar({ children, className = "" }: { children: React.ReactNode; className?: string }) {
     return (
-        <div className={`${className} sticky top-0 z-40 w-full backdrop-blur-sm border-b border-solid border-gray-300`}>
-            <div className="h-2 bg-main-500/75 drop-shadow-2xl" />
-            <div id="sidebar" className="sticky flex flex-row h-fit md:px-20 bg-white/60">
-                {children}
+        <>
+            <div className="h-5" />
+            <div className="flex flex-col items-center w-full sticky top-0">
+                <div className={`${className} z-40 w-full md:w-10/12 backdrop-blur-sm`} style={{transformStyle:"preserve-3d",transform:"rotate3d(1, 0, 0, 45deg)",perspective:"1000px"}}>
+                    <div className="bar-top"></div>
+                    <div className="bar-left"></div>
+                    <div id="sidebar" className="bar-front">
+                        {children}
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
 function Content({ children }: { children: React.ReactNode }) {
     return (
-        <div
-            id="page-container"
-            className="bg-gray-100 w-full flex justify-center items-center page-transition-finish">
+        <div id="page-container" className="bg-gray-100 w-full flex justify-center items-center page-transition-finish">
             <div id="page-content" className="p-5 pb-12 w-full md:w-9/12 flex justify-center items-center">
                 {children}
             </div>
