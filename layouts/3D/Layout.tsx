@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TabLink } from "./TabLink";
 import { usePageContext } from "vike-react/usePageContext";
 import { logout } from "@utils/client/requests/main";
 import "../tailwind.css";
 import "./style.css";
+import useInView from "@hooks/useInView";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const pageContext = usePageContext();
-    return (
+    return (<>
         <div className="min-h-screen bg-gray-100">
             <TopBar>
                 {pageContext.urlPathname === "/" ? (
@@ -62,19 +63,30 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </TopBar>
             <Content>{children}</Content>
         </div>
+        <div className="min-h-[8vh] bg-gray-300 flex justify-center items-center"><p className="text-sm text-gray-500">©Heuluck 2024   All Rights Reserved</p></div>
+        </>
     );
 }
 
 export function TopBar({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+    const [targetRef, inView] = useInView({ threshold: 0 });
+    useEffect(() => {
+        console.log(inView);
+    }, [inView]);
     return (
         <>
-            <div className="h-5" />
-            <div className="flex flex-col items-center w-full sticky top-0">
-                <div className={`${className} z-40 w-full md:w-10/12 backdrop-blur-sm`} style={{transformStyle:"preserve-3d",transform:"rotate3d(1, 0, 0, 45deg)",perspective:"1000px"}}>
-                    <div className="bar-top"></div>
-                    <div className="bar-left"></div>
-                    <div id="sidebar" className="bar-front">
-                        {children}
+            <div className="h-10" ref={targetRef as React.LegacyRef<HTMLDivElement>} />
+            <div className="flex flex-col items-center backdrop-blur-sm justify-center w-full sticky top-0">
+                <div className={[className, "cube-bar", !inView && "cube-bar-pinned"].join(" ")}>
+                    <div className="cube-bar-inner">
+                        <div className="bar-top">你好呀</div>
+                        <div className="bar-left"></div>
+                        <div id="sidebar" className="bar-front">
+                            {children}
+                        </div>
+                        <div className="bar-right"></div>
+                        <div className="bar-bottom"></div>
+                        <div className="bar-back"></div>
                     </div>
                 </div>
             </div>

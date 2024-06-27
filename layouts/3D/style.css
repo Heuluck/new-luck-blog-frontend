@@ -21,32 +21,73 @@ body {
     opacity: 1;
 }
 
-.bar-top{
+.cube-bar {
+    @apply z-40 w-full flex items-center justify-center;
+    --thickness: 30px;
+    --width: 80vw;
+    --height: 70px;
+    transform-style: preserve-3d;
+}
+
+.cube-bar .cube-bar-inner {
+    transform: rotateX(-30deg) rotateY(0deg) rotateZ(0deg);
+    transition: all 0.5s;
+    width: var(--width);
+    height: var(--height);
+    transform-style: preserve-3d;
+    perspective: 3000px;
+}
+
+.cube-bar-pinned .cube-bar-inner{
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) !important;
+    perspective: 4000px !important;
+}
+
+.cube-bar .cube-bar-inner > div {
+    width: var(--width);
+    height: var(--height);
+    position: absolute;
+    transition: all .3s;
+}
+
+.bar-top {
     @apply bg-main-500/75 h-16;
-    transform: rotateX(90deg) translateZ(20px);
+    transform: rotateX(90deg) translateZ(calc(var(--height) / 2));
     transition: all 0.3s ease-in-out;
 }
 
-.bar-left{
-    @apply bg-main-500/75 h-16;
-    transform: rotateY(-90deg) translateZ(20px);
+.bar-left {
+    @apply bg-main-500/0 h-16;
+    transform: rotateY(-90deg) translateZ(calc(var(--height) / 2));
+    transition: all 0.3s ease-in-out;
+    width: var(--height) !important;
+}
+
+.bar-front {
+    @apply flex flex-row h-fit md:px-20 bg-white;
+    transform: translateZ(calc(var(--height) / 2));
     transition: all 0.3s ease-in-out;
 }
 
-.bar-front{
-    @apply flex flex-row h-fit md:px-20 bg-white/60;
-    transform: translateZ(20px);
+.cube-bar-pinned .bar-front{
+    @apply bg-white/60;
+}
+
+.bar-back {
+    @apply flex flex-row h-fit md:px-20;
+    transform: translateZ(calc(-1 * var(--height) / 2));
     transition: all 0.3s ease-in-out;
 }
 
-/* .bar-right{
-
+.bar-right {
+    @apply bg-main-500/0 h-16;
+    transform: rotateY(90deg) translateZ(calc(var(--width) - var(--height) / 2));
+    transition: all 0.3s ease-in-out;
+    width: var(--height) !important;
 }
 
 .bar-bottom{
-
+    @apply bg-main-500/0 h-16;
+    transform: rotateX(-90deg) translateZ(calc(var(--height) / 2));
+    transition: all 0.3s ease-in-out;
 }
-
-.bar-back{
-
-} */

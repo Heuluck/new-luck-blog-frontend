@@ -2,7 +2,7 @@
     --size: 40px;
     transition: all 0.5s;
     margin: 72px;
-    transform: rotateX(-30deg) rotateY(30deg) rotateZ(0deg);
+    transform: rotateX(-30deg) rotateY(30deg) rotateZ(20deg);
     transform-style: preserve-3d;
 }
 

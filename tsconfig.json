@@ -32,7 +32,8 @@
       "@assets/*": ["./assets/*"],
       "@typesSelf/*": ["./types/*"],
       "@common/*": ["./common/*"],
-      "@server/*": ["./server/*"]
+      "@server/*": ["./server/*"],
+      "@hooks/*": ["./hooks/*"]
     },
   },
   "exclude": [

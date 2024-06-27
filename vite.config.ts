@@ -15,6 +15,7 @@ export default defineConfig({
             "@typesSelf": "/types",
             "@common": "/common",
             "@server": "/server",
+            "@hooks": "/hooks",
         },
     },
 });

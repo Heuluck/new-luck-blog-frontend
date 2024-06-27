@@ -1,5 +1,4 @@
 import React from "react";
-import { Counter } from "./Counter.jsx";
 import { SlateBgBreadcrumb } from "@components/button/breadcrumb.jsx";
 import { Button } from "@components/button/button.jsx";
 import { Cube } from "@components/Test/3D/3d.jsx";
